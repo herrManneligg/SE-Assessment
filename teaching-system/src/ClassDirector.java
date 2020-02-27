@@ -7,7 +7,6 @@ public class ClassDirector extends Person {
 
 	public ClassDirector(String name, String email) {
 		super(name, email);
-
 		listOfCourses = new ArrayList<>();
 	}
 
@@ -20,13 +19,12 @@ public class ClassDirector extends Person {
 		return null;
 	}
 
-	public void addRequerementsToCourse(Course selectedCourse, String name, Date timeExp, String availability) {
-
-		selectedCourse.update(name, timeExp, availability);
+	public void addRequirementsToCourse(Course selectedCourse, Date timeExp, String availability) {
+//		selectedCourse.update(selectedCourse, timeExp, availability);
 	}
 
-	public void addCourseToList(Course newCourse) {
-		listOfCourses.add(newCourse);
+	public void addCourseToList(String newCourse) {
+		listOfCourses.add(new Course(newCourse));
 	}
 
 	public void removeCourseFromList(Course selectedCourse) {
