@@ -15,6 +15,5 @@ public class PttDirector extends Person {
 	public void reject(Course approvedCourse) {
 		approvedCourse.reject();
 	}
-	
 
 }
