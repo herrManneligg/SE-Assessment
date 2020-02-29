@@ -13,7 +13,7 @@ public class Course {
 		requirements = null;
 	}
 
-	public void update(String name, Date timeExp, String availability) {
+	public void update(String name, int timeExp, String availability) {
 
 	}
 
