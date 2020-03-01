@@ -63,11 +63,13 @@ public class Course {
 	}
 
 	public Teacher getTeacher() { //enables method to return null value
-		if (this.assignedTeacher == null) {
-			return null;
-		} else {
-			return assignedTeacher;
-		}
+//		if (this.assignedTeacher == null) {
+//			return null;
+//		} else {
+//			return assignedTeacher;
+//		}
+		// Changed this to ternary operation
+		return assignedTeacher == null ? null : assignedTeacher;
 	}
 	
 	public String readList() { //gives back String

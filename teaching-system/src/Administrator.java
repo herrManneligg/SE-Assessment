@@ -12,7 +12,6 @@ public class Administrator extends Person {
 		super(name, email);
 		listOfUnassignedTeachers = new ArrayList<>();
 		this.classDirector = classDirector;
-//		listOfCourses = new ArrayList<>();
 		this.listOfCourses = classDirector.getListOfCourses();
 	}
 
@@ -40,6 +39,10 @@ public class Administrator extends Person {
 		this.classDirector = classDirector;
 	}
 
+	public void unassignTeacherFromCourse(Course c, Teacher t) {
+		c.assingTeacher(null);
+	}
+
 	public String getCourseInfo(Course course) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			if (listOfCourses.get(i) == course) {
@@ -61,6 +64,7 @@ public class Administrator extends Person {
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			if (listOfCourses.get(i) == course) {
 				listOfCourses.get(i).assingTeacher(teacher);
+				teacher.setAssignedCourse(course);
 				listOfUnassignedTeachers.remove(teacher);
 			}
 		}
