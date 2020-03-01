@@ -32,7 +32,7 @@ public class Teacher extends Person {
 	}
 
 	public String getAssignedCourse() {
-		return assignedCourse == null ? assignedCourse.getCourseName() : "Not assigned to a course.";
+		return assignedCourse != null ? assignedCourse.getCourseName() : "Not assigned to a course.";
 	}
 
 	public void setAssignedCourse(Course assignedCourse) {
