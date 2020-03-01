@@ -13,10 +13,6 @@ public class Course {
 		requirements = null;
 	}
 
-	public void update(String name, int timeExp, String availability) {
-
-	}
-
 	public String getCourseInfo() {
 		
 		String info = "- Course: " + name + "\n";
@@ -73,7 +69,6 @@ public class Course {
 			return assignedTeacher;
 		}
 	}
-
 	
 	public String readList() { //gives back String
 		String info = "";

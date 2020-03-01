@@ -36,4 +36,8 @@ public class ClassDirector extends Person {
 			}
 		}
 	}
+	
+	public ArrayList<Course> getListOfCourses(){
+		return this.listOfCourses;
+	}
 }
