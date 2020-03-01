@@ -1,7 +1,7 @@
 import java.io.PrintStream;
 
 public class InitialViewController {
-	
+
 	private InitialView initialViewObject;
 	private Model modelObject;
 	PrintStream pS;
@@ -9,10 +9,9 @@ public class InitialViewController {
 	private final String selectViewUserInputOutOfBoundaries = "That number does not correspond to the avaiable options";
 	private final String selectViewUserInput = "Please, enter the number that corresponds to your role and press 'Enter'.";
 
-	
 	public InitialViewController(Model model) {
-		this.modelObject=model;
-		this.initialViewObject= new InitialView(model, this, pS);
+		this.modelObject = model;
+		this.initialViewObject = new InitialView(model, this, pS);
 	}
 
 }

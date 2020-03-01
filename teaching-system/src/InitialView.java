@@ -1,12 +1,15 @@
 import java.io.PrintStream;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InitialView {
 
 	// private Model modelObject;
 	InitialViewController initialViewControllerObject;
+	AdminController adminController;
 	Model modelObject;
 	PrintStream pS;
+	AdminView adminview;
 
 	private final String outOfBoundaries = "Only numerical values allowed! Please choose a numerical value between 1 and 3";
 	private final String selectViewUserInputOutOfBoundaries = "That number does not correspond to the avaiable options";
@@ -22,24 +25,42 @@ public class InitialView {
 
 	}
 
-	public Integer userInput() {
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String input = scanner.nextLine();
-		if (input.contentEquals("1")) {
-			return Integer.valueOf(input);
-		} else if (input.contentEquals("2")) {
-			return Integer.valueOf(input);
-		} else if (input.contentEquals("3")) {
-			return Integer.valueOf(input);
-		}
+	public void userInput() {
 
-		return Integer.valueOf(input);
+		boolean isAccepted = false;
+		Scanner scanner = new Scanner(System.in);
+		int input = scanner.nextInt();
+
+		while (!isAccepted) {
+			try {
+				if (input == 1) {
+					System.out.println("ONE-works");
+					isAccepted = true;
+
+				} else if (input == 2) {
+					System.out.println(" TWO- works");
+					AdminView adminView = new AdminView(modelObject, adminController);
+					adminView.initializeAdminView();
+					isAccepted = true;
+
+				} else if (input == 3) {
+					System.out.println("THREE-works");
+					isAccepted = true;
+				} else {
+					System.out.println("Pls use a numerical value within the range");
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("noob");
+			}
+
+		}
+		scanner.close();
+		isAccepted = false;
 	}
 
 	public String initialView() {
 		return "   1: Class Director\n" + "   2: Administrator\n" + "   3: PTT Director\n"
-				+ "Please enter the number that corresponds to your role and press 'Enter': \n\n";
+				+ "\nPlease enter the number that corresponds to your role and press 'Enter': \n\n";
 
 	}
 
