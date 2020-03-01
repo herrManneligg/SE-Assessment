@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ClassDirector extends Person {
 
@@ -19,7 +18,8 @@ public class ClassDirector extends Person {
 		return null;
 	}
 
-	public void addRequirementsToCourse(Course selectedCourse, Date timeExp, String availability) {
+	public void addRequirementsToCourse(Course selectedCourse, Integer timeExp, String availability) {
+
 //		selectedCourse.update(selectedCourse, timeExp, availability);
 	}
 

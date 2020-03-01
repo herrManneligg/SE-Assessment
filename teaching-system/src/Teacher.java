@@ -1,3 +1,4 @@
+import java.util.Date;
 
 public class Teacher extends Person {
 	
@@ -16,7 +17,7 @@ public class Teacher extends Person {
 		background = c;
 		inTraining = false;
 	}
-
+	
 	public String getCourse() {
 		return background;
 	}
