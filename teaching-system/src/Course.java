@@ -10,7 +10,7 @@ public class Course {
 	public Course(String name) {
 		this.name = name;
 		assignedTeacher = null;
-		requirements = null;
+		requirements = new ListOfRequirements(this);
 	}
 
 	public String getCourseInfo() {
@@ -35,29 +35,29 @@ public class Course {
 		return name;
 	}
 
-	public void update(String name, Integer timeExp, String availability) { // updates name, experience, and
-																			// availability
-		if (name == null) {
-			// no update of the name
+	public void updateListOfRequirements(int timeExp, String availability, String backgroundDescription) {
+		
+		if (this.requirements == null) {
+			this.requirements = new ListOfRequirements(this, timeExp, availability, backgroundDescription);
 		} else {
-			this.name = name;
+			this.requirements.updateAllRequirements(timeExp, availability, backgroundDescription);
 		}
 
-		if ((timeExp == null) && (availability == null)) {
-			// only Course-Name gets updated, no changes to the ListOfRequirements
-		} else {
-			if (this.requirements == null) {
-				this.requirements = new ListOfRequirements(this, timeExp, availability);
-			} else {
-				if (timeExp == null) {
-					this.requirements.update(availability);
-				} else if (availability == null) {
-					this.requirements.update(timeExp);
-				} else {
-					this.requirements.update(timeExp, availability);
-				}
-			}
-		}
+//		if ((timeExp == null) && (availability == null)) {
+//			// only Course-Name gets updated, no changes to the ListOfRequirements
+//		} else {
+//			if (this.requirements == null) {
+//				this.requirements = new ListOfRequirements(this, timeExp, availability);
+//			} else {
+//				if (timeExp == null) {
+//					this.requirements.update(availability);
+//				} else if (availability == null) {
+//					this.requirements.update(timeExp);
+//				} else {
+//					this.requirements.update(timeExp, availability);
+//				}
+//			}
+//		}
 	}
 
 	public void assingTeacher(Teacher t) {
@@ -98,7 +98,6 @@ public class Course {
 	public void assignRequirementsList(ListOfRequirements LoR) {
 		this.requirements = LoR;
 		LoR.setCorrespondingCourse(this);
-
 	}
 
 }

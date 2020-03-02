@@ -3,8 +3,8 @@ public class MethodSimulation {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Course courseOne = new Course("First Course");
-		Course courseTwo = new Course("Second Course");
+		Course courseOne = new Course("Programming");
+		Course courseTwo = new Course("Maths");
 		Teacher ronPoet = new Teacher("Ron Poet", "ron.poet@student.gla.ac.uk",7,"Spring 2020","Software Engineering");
 		Teacher nothingBert = new Teacher ("Nothing Bert", "nothing@knownothing.com",0, "Never", "Nothing");
 		ListOfRequirements listForSoftwareEnginering = new ListOfRequirements(courseOne, 4, "Spring 2020");
