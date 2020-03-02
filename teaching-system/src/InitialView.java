@@ -29,10 +29,11 @@ public class InitialView {
 
 		boolean isAccepted = false;
 		Scanner scanner = new Scanner(System.in);
-		int input = scanner.nextInt();
 
 		while (!isAccepted) {
 			try {
+				int input = scanner.nextInt();
+
 				if (input == 1) {
 					System.out.println("ONE-works");
 					isAccepted = true;
@@ -50,12 +51,12 @@ public class InitialView {
 					System.out.println("Pls use a numerical value within the range");
 				}
 			} catch (InputMismatchException e) {
-				System.out.println("noob");
+				System.out.println("What don't you understand about 'number'?");
+				scanner.nextLine();
 			}
-
 		}
+
 		scanner.close();
-		isAccepted = false;
 	}
 
 	public String initialView() {
