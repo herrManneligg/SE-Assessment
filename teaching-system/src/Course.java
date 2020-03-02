@@ -98,7 +98,7 @@ public class Course {
 	public void assignRequirementsList(ListOfRequirements LoR) {
 		this.requirements = LoR;
 		LoR.setCorrespondingCourse(this);
+		// look at this as well Efra
 	}
-
 }
 

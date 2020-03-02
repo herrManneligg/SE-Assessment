@@ -6,7 +6,7 @@ public class Teacher extends Person {
 	// History of Arts may also be suitable
 	// to teach History or even Geography. I think it's better to have a wee
 	// description of the candidate teacher
-	// background, and then the PTT Director may decide which teacher suits bettter
+	// background, and then the PTT Director may decide which teacher suits better
 	// the position.
 	
 	private boolean inTraining;
