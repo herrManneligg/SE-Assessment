@@ -11,8 +11,8 @@ public class InitialView {
 	PrintStream pS;
 	AdminView adminview;
 
-	private final String outOfBoundaries = "Only numerical values allowed! Please choose a numerical value between 1 and 3";
-	private final String selectViewUserInputOutOfBoundaries = "That number does not correspond to the avaiable options";
+	private final String outOfBoundaries = "Please choose a numerical value between the range 1 and 3, please try again";
+	private final String selectViewUserInputOutOfBoundaries = "That number does not correspond to the avaiable options, please try again";
 	private final String selectViewUserInput = "Please, enter the number that corresponds to your role and press 'Enter'.";
 
 	public InitialView(Model model, InitialViewController controller, PrintStream ps) {
@@ -48,10 +48,12 @@ public class InitialView {
 					System.out.println("THREE-works");
 					isAccepted = true;
 				} else {
-					System.out.println("Pls use a numerical value within the range");
+					System.out.println(outOfBoundaries);
+					scanner.nextLine();
+					
 				}
 			} catch (InputMismatchException e) {
-				System.out.println("What don't you understand about 'number'?");
+				System.out.println(selectViewUserInputOutOfBoundaries);
 				scanner.nextLine();
 			}
 		}
@@ -60,8 +62,8 @@ public class InitialView {
 	}
 
 	public String initialView() {
-		return "   1: Class Director\n" + "   2: Administrator\n" + "   3: PTT Director\n"
-				+ "\nPlease enter the number that corresponds to your role and press 'Enter': \n\n";
+		return "   1: Class Director\n" + "   2: Administrator\n" + "   3: PTT Director\n\n"
+				+ selectViewUserInput+"\n\n";
 
 	}
 
