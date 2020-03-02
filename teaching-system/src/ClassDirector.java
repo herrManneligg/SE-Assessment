@@ -12,6 +12,19 @@ public class ClassDirector extends Person {
 	public void createCourse(String newCourseName) {
 		listOfCourses.add(new Course(newCourseName));
 	}
+	
+	public void removeCourse(String courseToRemove) {
+		boolean removed = false;
+		for (int i = 0; i < listOfCourses.size(); i++) {
+			if (listOfCourses.get(i).getCourseName().equals(courseToRemove)) {
+				listOfCourses.remove(i);
+				System.out.println("The course " + courseToRemove + " has been removed.");
+				removed = true;
+			} else if (removed = false) {
+				System.out.println("There was no course removed.");
+			}
+		}
+	}
 
 	public Course selectCourse(String selectedCourse) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
