@@ -111,12 +111,13 @@ public class Administrator extends Person {
 		String teacherName = "";
 		String teacherSurname = "";
 		String teacherEmail = "";
-		int experience = 0;
-		String semester = "";
-		int av;
 		String background = "";
+		String semester = "";
+		
 		boolean isAccepted = false;
-
+		int experience = 0;
+		int av;
+		
 		Scanner in = new Scanner(System.in);
 		
 		System.out.println("-- Enter the information of the new teacher --"); 

@@ -10,7 +10,7 @@ public class MethodSimulation {
 		ListOfRequirements listForSoftwareEnginering = new ListOfRequirements(courseOne, 4, "Spring 2020");
 		ListOfRequirements listForTesting = new ListOfRequirements( 3, "Spring 2121");
 	
-	//Testing Methods of Course-Class
+		//Testing Methods of Course-Class
 		System.out.println(courseOne.getCourseInfo());
 		System.out.println(courseOne.readList());
 		courseOne.approve();
@@ -43,7 +43,7 @@ public class MethodSimulation {
 		courseOne.update(null, null, null);
 		System.out.println(courseOne.readList());
 		
-	//Testing Methods of ListOfRequirements Class	
+		//Testing Methods of ListOfRequirements Class	
 		System.out.println(listForTesting.isReady(null));
 		System.out.println(listForTesting.isReady(ronPoet));
 		System.out.println(listForTesting.isReady(nothingBert));
