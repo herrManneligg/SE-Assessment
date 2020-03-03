@@ -177,6 +177,12 @@ public class SemesterInfoFileHandler extends FileHandler {
 		this.writeDatabaseFile(databaseObj);
 	}
 
+	public HashMap<String, Object> getLastSemesterRegister() throws ParseException, IOException {
+		ArrayList<HashMap<String, Object>> semestersList = this.getAll();
+		int lastIndex = semestersList.size() - 1;
+		return semestersList.get(lastIndex);
+	}
+	
 	/**
 	 * Method that will return a single semester by its ID
 	 * 
@@ -511,8 +517,7 @@ public class SemesterInfoFileHandler extends FileHandler {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public void addNewCourse(int semesterId, int courseId, int experience, String grade, String courseInfo,
-			String notes) throws ParseException, IOException {
+	public void addNewCourse(int semesterId, int courseId, int experience, String availability, String backgroundRequirement) throws ParseException, IOException {
 		try {
 
 			// check if the course we are trying to assign exists in the database
@@ -558,9 +563,8 @@ public class SemesterInfoFileHandler extends FileHandler {
 						assignedTeachersObject.put("teacher_assigned", currentCourse.get("teacher_assigned"));
 						assignedTeachersObject.put("approved", currentCourse.get("approved"));
 						assignedTeachersObject.put("experience", currentCourse.get("experience"));
-						assignedTeachersObject.put("grade", currentCourse.get("grade"));
-						assignedTeachersObject.put("course", currentCourse.get("course"));
-						assignedTeachersObject.put("notes", currentCourse.get("notes"));
+						assignedTeachersObject.put("availability", currentCourse.get("availability"));
+						assignedTeachersObject.put("backgroundRequirement", currentCourse.get("backgroundRequirement"));
 						assignedCoursesArray.add(assignedTeachersObject);
 					}
 
@@ -569,9 +573,8 @@ public class SemesterInfoFileHandler extends FileHandler {
 					assignedTeachersObject.put("teacher_assigned", null);
 					assignedTeachersObject.put("approved", false);
 					assignedTeachersObject.put("experience", experience);
-					assignedTeachersObject.put("grade", grade);
-					assignedTeachersObject.put("course", courseInfo);
-					assignedTeachersObject.put("notes", notes);
+					assignedTeachersObject.put("availability", availability);
+					assignedTeachersObject.put("backgroundRequirement", backgroundRequirement);
 					assignedCoursesArray.add(assignedTeachersObject);
 					tempSemester.put("courses_list", assignedCoursesArray);
 
@@ -632,11 +635,10 @@ public class SemesterInfoFileHandler extends FileHandler {
 						JSONObject assignedCoursesObject = new JSONObject();
 						HashMap<String, Object> currentCourse = assignedCourses.get(i);
 						assignedCoursesObject.put("course_id", currentCourse.get("course_id"));
-						assignedCoursesObject.put("experience", currentCourse.get("experience"));
 						assignedCoursesObject.put("approved", currentCourse.get("approved"));
-						assignedCoursesObject.put("grade", currentCourse.get("grade"));
-						assignedCoursesObject.put("course", currentCourse.get("course"));
-						assignedCoursesObject.put("notes", currentCourse.get("notes"));
+						assignedCoursesObject.put("experience", currentCourse.get("experience"));
+						assignedCoursesObject.put("availability", currentCourse.get("availability"));
+						assignedCoursesObject.put("backgroundRequirement", currentCourse.get("backgroundRequirement"));
 						if ((int) currentCourse.get("course_id") == courseId) {
 							assignedCoursesObject.put("teacher_assigned", teacherId);
 						} else {
@@ -699,9 +701,9 @@ public class SemesterInfoFileHandler extends FileHandler {
 						assignedCoursesObject.put("course_id", currentCourse.get("course_id"));
 						assignedCoursesObject.put("teacher_assigned", currentCourse.get("teacher_assigned"));
 						assignedCoursesObject.put("experience", currentCourse.get("experience"));
-						assignedCoursesObject.put("grade", currentCourse.get("grade"));
-						assignedCoursesObject.put("course", currentCourse.get("course"));
-						assignedCoursesObject.put("notes", currentCourse.get("notes"));
+						assignedCoursesObject.put("availability", currentCourse.get("availability"));
+						assignedCoursesObject.put("backgroundRequirement", currentCourse.get("backgroundRequirement"));
+						
 						if ((int) currentCourse.get("course_id") == courseId) {
 							assignedCoursesObject.put("approved", isApproved);
 						} else {

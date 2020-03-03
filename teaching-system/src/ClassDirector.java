@@ -9,9 +9,9 @@ public class ClassDirector extends Person {
 		listOfCourses = new ArrayList<>();
 	}
 
-	public void createCourse(String newCourseName) {
-		listOfCourses.add(new Course(newCourseName));
-	}
+//	public void createCourse(String newCourseName) {
+//		listOfCourses.add(new Course(newCourseName));
+//	}
 
 	public void removeCourse(String courseToRemove) {
 		boolean removed = false;
@@ -44,9 +44,9 @@ public class ClassDirector extends Person {
 		}
 	}
 
-	public void addCourseToList(String newCourse) {
-		listOfCourses.add(new Course(newCourse));
-	}
+//	public void addCourseToList(String newCourse) {
+//		listOfCourses.add(new Course(newCourse));
+//	}
 
 	public void removeCourseFromList(Course selectedCourse) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
