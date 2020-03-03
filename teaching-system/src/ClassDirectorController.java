@@ -6,7 +6,7 @@ public class ClassDirectorController {
 	private View viewObject;
 	private InitialController initialController;
 	private Model model;
-	
+
 	public ClassDirectorController(InitialController initialController, Model model, PrintStream ps) {
 		this.initialController = initialController;
 		this.model = model;
