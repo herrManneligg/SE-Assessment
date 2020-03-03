@@ -5,8 +5,7 @@ public class MainTestView {
 		// TODO Auto-generated method stub
 		Model model = new Model();
 		InitialViewController initialViewController= new InitialViewController(model);
-				
-	
+			
 	}
 
 }

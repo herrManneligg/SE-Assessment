@@ -12,34 +12,45 @@ public class Administrator extends Person {
 		super(name, email);
 		listOfUnassignedTeachers = new ArrayList<>();
 		this.classDirector = classDirector;
-//		listOfCourses = new ArrayList<>();
 		this.listOfCourses = classDirector.getListOfCourses();
 	}
 
+	// Getting the ArrayList of courses
 	public ArrayList<Course> getListOfCourses() {
 		return listOfCourses;
 	}
 
+	// Setting the ArrayList of courses
 	public void setListOfCourses(ArrayList<Course> listOfCourses) {
 		this.listOfCourses = listOfCourses;
 	}
 
+	// Getting the ArrayList of unassigned teachers
 	public ArrayList<Teacher> getListOfUnassignedTeachers() {
 		return listOfUnassignedTeachers;
 	}
-
+	// Setting the ArrayList of unassigned teachers
 	public void setListOfUnassignedTeachers(ArrayList<Teacher> listOfUnassignedTeachers) {
 		this.listOfUnassignedTeachers = listOfUnassignedTeachers;
 	}
 
+	// Getting the class director
 	public ClassDirector getClassDirector() {
 		return classDirector;
 	}
 
+	// Setting the class director
 	public void setClassDirector(ClassDirector classDirector) {
 		this.classDirector = classDirector;
 	}
-
+	
+	// Unassigning teacher from a course
+	public void unassignTeacherFromCourse(Course c, Teacher t) {
+		c.assingTeacher(null);
+		t.setAssignedCourse(null);
+	}
+	
+	// Getting information from a course
 	public String getCourseInfo(Course course) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			if (listOfCourses.get(i) == course) {
@@ -49,23 +60,28 @@ public class Administrator extends Person {
 		return "There is no information for the selected course.";
 	}
 
+	// Sending the teacher to training
 	public void sendTeacherToTraining(Teacher teacher) {
 		teacher.setInTraining(true);
 	}
 
+	// removing a teacher from training 
 	public void removeTeacherFromTraining(Teacher teacher) {
 		teacher.setInTraining(false);
 	}
 
+	// Assigning a teacher to a course
 	public void assignTeacherToCourse(Course course, Teacher teacher) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			if (listOfCourses.get(i) == course) {
 				listOfCourses.get(i).assingTeacher(teacher);
+				teacher.setAssignedCourse(course);
 				listOfUnassignedTeachers.remove(teacher);
 			}
 		}
 	}
 
+	// Getting a list of the teachers assigned to a course
 	public String getAssignedTeachersList() {
 		String list = "List of assigned teachers: \n";
 
@@ -78,6 +94,7 @@ public class Administrator extends Person {
 		return list;
 	}
 
+	// Getting a list of unassigned teachers
 	public String getUnassignedTeachersList() {
 		String list = "List of unassigned teachers: \n";
 
@@ -88,9 +105,11 @@ public class Administrator extends Person {
 		return list;
 	}
 
+	// Creating a teacher in the system
 	public void createTeacher() {
 
 		String teacherName = "";
+		String teacherSurname = "";
 		String teacherEmail = "";
 		int experience = 0;
 		String semester = "";
@@ -99,7 +118,8 @@ public class Administrator extends Person {
 		boolean isAccepted = false;
 
 		Scanner in = new Scanner(System.in);
-
+		
+		System.out.println("-- Enter the information of the new teacher --"); 
 		while (!isAccepted) {
 			System.out.print("Name: ");
 			try {
@@ -120,6 +140,29 @@ public class Administrator extends Person {
 				System.err.println("Please, enter a valid name.");
 			}
 		}
+		
+		isAccepted = false;
+		while (!isAccepted) {
+			System.out.print("Surname: ");
+			try {
+				if (in.hasNextLine()) {
+
+					teacherSurname = in.nextLine();
+					if (isLetter(teacherSurname) == true && teacherSurname.length() < 15) {
+						teacherSurname = teacherSurname.substring(0, 1).toUpperCase()
+								+ teacherSurname.substring(1).toLowerCase();
+						isAccepted = true;
+					} else {
+						System.out.println(
+								"Enter a surname with alphabetical values with no accents, numbers, symbols or spaces (max. 15 characters).");
+					}
+				}
+
+			} catch (InputMismatchException e) {
+				System.err.println("Please, enter a valid surname.");
+			}
+		}
+		teacherName += " " + teacherSurname;
 
 		isAccepted = false;
 		while (!isAccepted) {
@@ -146,11 +189,11 @@ public class Administrator extends Person {
 				if (in.hasNextInt()) {
 					experience = in.nextInt();
 
-					if (isLetter(Integer.toString(experience)) == false && experience >= 0 && experience <= 35) {
+					if (isLetter(Integer.toString(experience)) == false && experience >= 0 && experience <= 50) {
 						isAccepted = true;
 						in.nextLine();
 					} else {
-						System.out.println("Please enter a positive value and less than 36 years.");
+						System.out.println("Please enter a positive value less or equals than 50 years.");
 					}
 
 				} else {
@@ -163,7 +206,7 @@ public class Administrator extends Person {
 			}
 		}
 
-		System.out.print("When is available?\n(1) Semester 1\n(2) Semester 2\n(3) All academic year\n");
+		System.out.print("When is available?\n(1) Semester I\n(2) Semester II\n(3) All academic year\n");
 		isAccepted = false;
 		while (!isAccepted) {
 
@@ -189,7 +232,7 @@ public class Administrator extends Person {
 			}
 		}
 
-		System.out.print("Background: ");
+		System.out.print("Background description: ");
 		isAccepted = false;
 		while (!isAccepted) {
 
@@ -200,14 +243,21 @@ public class Administrator extends Person {
 				}
 
 			} catch (InputMismatchException e) {
-				System.err.println("Please, enter a background.");
+				System.err.println("Please, enter a background description.");
 			}
 		}
-
-		listOfUnassignedTeachers.add(new Teacher(teacherName, teacherEmail, experience, semester, background));
+		
+		try {
+			listOfUnassignedTeachers.add(new Teacher(teacherName, teacherEmail, experience, semester, background));
+			System.out.println("\nTeacher " + teacherName + " created.\n");
+		} catch (Exception e) {
+			System.err.println("\n Something went wrong when creating the new teacher. Please, revise the teacher details and try again.");
+		}
+		
 		in.close();
 	}
 
+	// Checking if the user input is alphabetical
 	public boolean isLetter(String checkText) {
 		String textUpper = checkText.toUpperCase();
 
@@ -224,9 +274,19 @@ public class Administrator extends Person {
 		return true;
 	}
 
+	// Checking if the user input corresponds to an acceptable email
 	public boolean isEmail(String checkText) {
 
 		if (checkText.length() > 6) {
+			int count = 0;
+			for (int i = 0; i < checkText.length();i ++) {
+				if (checkText.charAt(i) == '@') {
+					count++;
+				} else if (count >= 2) {
+					return false;
+				}
+			}
+			
 			for (int i = 0; i < checkText.length(); i++) {
 				if ((checkText.charAt(0) != '@'
 						&& (checkText.charAt(i) == '@' && ((checkText.charAt(checkText.length() - 4) == '.')
