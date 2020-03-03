@@ -5,11 +5,12 @@ import java.util.Scanner;
 public class InitialView {
 
 	// private Model modelObject;
-	InitialViewController initialViewControllerObject;
-	AdminController adminController;
-	Model modelObject;
+	private InitialViewController initialViewControllerObject;
+	private AdminController adminController;
+	private ClassDirectorController classDirectorController;
+	private PTTController pttController;
+	private Model modelObject;
 	PrintStream pS;
-	AdminView adminview;
 
 	private final String outOfBoundaries = "Please choose a numerical value between the range 1 and 3, please try again";
 	private final String selectViewUserInputOutOfBoundaries = "That number does not correspond to the avaiable options, please try again";
@@ -17,7 +18,7 @@ public class InitialView {
 
 	public InitialView(Model model, InitialViewController controller, PrintStream ps) {
 		this.modelObject = model;
-		this.initialViewControllerObject = controller;
+		this.setInitialViewControllerObject(controller);
 		PrintStream pStream = new PrintStream(System.out);
 		pStream.print(initialView());
 
@@ -35,17 +36,19 @@ public class InitialView {
 				int input = scanner.nextInt();
 
 				if (input == 1) {
-					System.out.println("ONE-works");
+					ClassDirectorView classDirectorView= new ClassDirectorView(classDirectorController, modelObject);
+					classDirectorView.initializeClassDirectorView();
 					isAccepted = true;
 
 				} else if (input == 2) {
-					System.out.println(" TWO- works");
 					AdminView adminView = new AdminView(modelObject, adminController);
 					adminView.initializeAdminView();
 					isAccepted = true;
 
 				} else if (input == 3) {
-					System.out.println("THREE-works");
+					PTTView pttView=new PTTView(pttController, modelObject);
+					pttView.initializePttView();
+					
 					isAccepted = true;
 				} else {
 					System.out.println(outOfBoundaries);
@@ -65,6 +68,14 @@ public class InitialView {
 		return "   1: Class Director\n" + "   2: Administrator\n" + "   3: PTT Director\n\n"
 				+ selectViewUserInput+"\n\n";
 
+	}
+
+	public InitialViewController getInitialViewControllerObject() {
+		return initialViewControllerObject;
+	}
+
+	public void setInitialViewControllerObject(InitialViewController initialViewControllerObject) {
+		this.initialViewControllerObject = initialViewControllerObject;
 	}
 
 }
