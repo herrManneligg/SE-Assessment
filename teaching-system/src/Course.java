@@ -1,4 +1,8 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.json.simple.parser.ParseException;
 
 public class Course {
 
@@ -8,6 +12,11 @@ public class Course {
 	private ListOfRequirements requirements;
 	private boolean approved;
 
+	public Course(String name) {
+		this.name = name;
+		this.assignedTeacher = null;
+	}
+	
 	public Course(String name, ListOfRequirements requirements) {
 		this.name = name;
 		this.assignedTeacher = null;
@@ -74,6 +83,10 @@ public class Course {
 		}
 		return info;
 	}
+	
+	public ListOfRequirements getRequirementsList() {
+		return this.requirements;
+	}
 
 	public void assignRequirementsList(ListOfRequirements LoR) {
 		this.requirements = LoR;
@@ -85,6 +98,25 @@ public class Course {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public static ArrayList<HashMap<String, Object>> getCourses() throws ParseException, IOException {
+		CourseFileHandler newCourse = new CourseFileHandler();
+		return newCourse.getAll();
+	}
+	
+	public void save(int semesterId) {
+		try {
+			CourseFileHandler newCourse = new CourseFileHandler();
+			newCourse.create(this.name);
+			HashMap<String, Object> lastRegister = newCourse.getLastRegister();
+			SemesterInfoFileHandler semeserInfo = new SemesterInfoFileHandler();
+			this.setId((int) lastRegister.get("id"));
+			semeserInfo.addNewCourse(semesterId, (int) lastRegister.get("id"), this.requirements.getTimeExp(), this.requirements.getAvailability(), this.requirements.getBackgroundRequirement());
+		} catch (IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
 

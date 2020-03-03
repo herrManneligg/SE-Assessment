@@ -27,10 +27,12 @@ public class View {
 	protected int getUserInputInteger(String message) {
 		int userResponse = -1;
 		try {
-			System.out.print(message);
+			this.ps.print(message);
 			userResponse = this.input.nextInt();
 		} catch(InputMismatchException e) { 
-			this.ps.print(e);
+			this.input.nextLine();
+			this.ps.print("You should enter a number\n");
+			this.getUserInputInteger(message);
 		}
 		return userResponse;
 	}
@@ -39,9 +41,11 @@ public class View {
 		String userResponse = "";
 		try {			
 			this.ps.print(message);
-			userResponse = this.input.nextLine();
+			userResponse = this.input.next();
 		} catch(IllegalArgumentException e) {
-			this.ps.print(e);
+			this.input.nextLine();
+			this.ps.print("Wrong choice of letter, try again\n");
+			getUserInputString(message);
 		}
 		return userResponse;
 	}

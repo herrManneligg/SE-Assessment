@@ -3,12 +3,10 @@ import java.util.InputMismatchException;
 
 public class PTTDirectorController {
 	
-	private InitialController initialController;
 	private Model modelobject;
 	private View viewObject;
 
-	public PTTDirectorController(InitialController initialController, Model model, PrintStream ps) {
-		this.initialController = initialController;
+	public PTTDirectorController(Model model, PrintStream ps) {
 		this.modelobject = model;
 		this.viewObject = new View(ps);
 		this.showSelectedOptionFromScreen();

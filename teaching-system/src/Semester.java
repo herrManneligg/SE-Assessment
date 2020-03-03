@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -6,8 +8,8 @@ public class Semester {
 	private int year;
 	private int semesterNo;
 	private int datasbaseId;
-	private ArrayList<HashMap<String, Object>> listOfCourses;
-	private ArrayList<HashMap<String, Object>> listOfTeachers;
+	private ArrayList<Course> listOfCourses;
+	private ArrayList<Teacher> listOfTeachers;
 
 	public Semester(int year, int semesterNo) {
 		this.year = year;
@@ -30,19 +32,19 @@ public class Semester {
 		this.semesterNo = semesterNo;
 	}
 
-	public ArrayList<HashMap<String, Object>> getListOfCourses() {
+	public ArrayList<Course> getListOfCourses() {
 		return listOfCourses;
 	}
 
-	public void setListOfCourses(ArrayList<HashMap<String, Object>> listOfCourses) {
+	public void setListOfCourses(ArrayList<Course> listOfCourses) {
 		this.listOfCourses = listOfCourses;
 	}
 
-	public ArrayList<HashMap<String, Object>> getListOfTeachers() {
+	public ArrayList<Teacher> getListOfTeachers() {
 		return listOfTeachers;
 	}
 
-	public void setListOfTeachers(ArrayList<HashMap<String, Object>> listOfTeachers) {
+	public void setListOfTeachers(ArrayList<Teacher> listOfTeachers) {
 		this.listOfTeachers = listOfTeachers;
 	}
 
@@ -52,6 +54,17 @@ public class Semester {
 
 	public void setDatasbaseId(int datasbaseId) {
 		this.datasbaseId = datasbaseId;
+	}
+	
+	public static ArrayList<HashMap<String, Object>> getSemesters() throws IOException, org.json.simple.parser.ParseException {
+		SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
+		return semesterFileHandler.getAll();
+	}
+	
+	public void addACourse(int semesterId, Course course) throws org.json.simple.parser.ParseException, IOException {
+		this.listOfCourses.add(course);
+		SemesterInfoFileHandler fileHandler = new SemesterInfoFileHandler();
+		fileHandler.addNewCourse(semesterId, course.getId(), course.getRequirementsList().getTimeExp(), course.getRequirementsList().getAvailability(), course.getRequirementsList().getBackgroundRequirement());
 	}
 	
 }

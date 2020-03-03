@@ -3,12 +3,10 @@ import java.util.InputMismatchException;
 
 public class AdminController {
 	
-	private InitialController initialController;
 	private Model modelobject;
 	private View viewObject;
 	
-	public AdminController(InitialController initialController, Model model, PrintStream ps) {
-		this.initialController = initialController;
+	public AdminController(Model model, PrintStream ps) {
 		this.modelobject = model;
 		this.viewObject = new View(ps);
 		this.showSelectedOptionFromScreen();
