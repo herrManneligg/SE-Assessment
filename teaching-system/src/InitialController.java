@@ -3,7 +3,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InitialController {
-	
+
 	private View view;
 	private Model model;
 	private PrintStream ps;
@@ -14,34 +14,28 @@ public class InitialController {
 		this.view = new View(ps);
 		this.showSelectedScreen();
 	}
-	
+
 	public String getInitView() {
 		return this.model.getInitialViewInfo();
 	}
-	
+
 	public void showSelectedScreen() {
-		boolean finishAction = false;
-		while(!finishAction) {
-			try {
-				int input = this.view.getUserInputInteger(this.model.getInitialViewInfo());
-				
-				if (input == 1) {
-					new ClassDirectorController(this, this.model, this.ps);
-				} else if (input == 2) {
-					new AdminController(this, this.model, this.ps);
-				} else if (input == 3) {
-					new PTTDirectorController(this, this.model, this.ps);
-				} else if (input == 4) {
-					System.out.println("Good bye!");
-					System.exit(0);
-				} else {
-					System.out.println("Enter a numerical value within the range");
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("noob");
-			}
-			
+
+		int input = this.view.getUserInputInteger(this.model.getInitialViewInfo());
+
+		if (input == 1) {
+			new ClassDirectorController(this, this.model, this.ps);
+		} else if (input == 2) {
+			new AdminController(this, this.model, this.ps);
+
+		} else if (input == 3) {
+			new PTTDirectorController(this, this.model, this.ps);
+
+		} else if (input == 4) {
+			System.out.println("Good bye!");
+			System.exit(0);
 		}
+
 	}
 
 }

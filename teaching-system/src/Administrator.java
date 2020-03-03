@@ -20,6 +20,25 @@ public class Administrator extends Person {
 		return listOfCourses;
 	}
 
+// Marjan: Method for getting a filtered list of Courses (requirements are matched with teacher background)
+	public ArrayList<Course> getFilteredListOfCourses(Teacher teacher) {
+
+		ArrayList<Course> filteredCourse = new ArrayList<Course>();
+
+		for (Course c : listOfCourses) {
+			for (String requirement : c.getRequirements().getListOfBackgroundsRequirements()) {
+				if (requirement.equals(teacher.getBackground())) {
+					filteredCourse.add(c);
+					break;
+				} else {
+					continue;
+				}
+			}
+		}
+		return filteredCourse;
+
+	}
+
 	// Setting the ArrayList of courses
 	public void setListOfCourses(ArrayList<Course> listOfCourses) {
 		this.listOfCourses = listOfCourses;
@@ -29,6 +48,7 @@ public class Administrator extends Person {
 	public ArrayList<Teacher> getListOfUnassignedTeachers() {
 		return listOfUnassignedTeachers;
 	}
+
 	// Setting the ArrayList of unassigned teachers
 	public void setListOfUnassignedTeachers(ArrayList<Teacher> listOfUnassignedTeachers) {
 		this.listOfUnassignedTeachers = listOfUnassignedTeachers;
@@ -43,13 +63,13 @@ public class Administrator extends Person {
 	public void setClassDirector(ClassDirector classDirector) {
 		this.classDirector = classDirector;
 	}
-	
+
 	// Unassigning teacher from a course
 	public void unassignTeacherFromCourse(Course c, Teacher t) {
 		c.assingTeacher(null);
 		t.setAssignedCourse(null);
 	}
-	
+
 	// Getting information from a course
 	public String getCourseInfo(Course course) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
@@ -65,12 +85,13 @@ public class Administrator extends Person {
 		teacher.setInTraining(true);
 	}
 
-	// removing a teacher from training 
+	// removing a teacher from training
 	public void removeTeacherFromTraining(Teacher teacher) {
 		teacher.setInTraining(false);
 	}
 
 	// Assigning a teacher to a course
+	// getAvailableCoursesForTeacher - Marjan
 	public void assignTeacherToCourse(Course course, Teacher teacher) {
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			if (listOfCourses.get(i) == course) {
@@ -113,14 +134,14 @@ public class Administrator extends Person {
 		String teacherEmail = "";
 		String background = "";
 		String semester = "";
-		
+
 		boolean isAccepted = false;
 		int experience = 0;
 		int av;
-		
+
 		Scanner in = new Scanner(System.in);
-		
-		System.out.println("-- Enter the information of the new teacher --"); 
+
+		System.out.println("-- Enter the information of the new teacher --");
 		while (!isAccepted) {
 			System.out.print("Name: ");
 			try {
@@ -141,7 +162,7 @@ public class Administrator extends Person {
 				System.err.println("Please, enter a valid name.");
 			}
 		}
-		
+
 		isAccepted = false;
 		while (!isAccepted) {
 			System.out.print("Surname: ");
@@ -247,14 +268,15 @@ public class Administrator extends Person {
 				System.err.println("Please, enter a background description.");
 			}
 		}
-		
+
 		try {
 			listOfUnassignedTeachers.add(new Teacher(teacherName, teacherEmail, experience, semester, background));
 			System.out.println("\nTeacher " + teacherName + " created.\n");
 		} catch (Exception e) {
-			System.err.println("\n Something went wrong when creating the new teacher. Please, revise the teacher details and try again.");
+			System.err.println(
+					"\n Something went wrong when creating the new teacher. Please, revise the teacher details and try again.");
 		}
-		
+
 		in.close();
 	}
 
@@ -280,14 +302,14 @@ public class Administrator extends Person {
 
 		if (checkText.length() > 6) {
 			int count = 0;
-			for (int i = 0; i < checkText.length();i ++) {
+			for (int i = 0; i < checkText.length(); i++) {
 				if (checkText.charAt(i) == '@') {
 					count++;
 				} else if (count >= 2) {
 					return false;
 				}
 			}
-			
+
 			for (int i = 0; i < checkText.length(); i++) {
 				if ((checkText.charAt(0) != '@'
 						&& (checkText.charAt(i) == '@' && ((checkText.charAt(checkText.length() - 4) == '.')

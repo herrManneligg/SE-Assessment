@@ -2,15 +2,16 @@
 
 public class Course {
 
+	private int id;
 	private String name;
 	private Teacher assignedTeacher;
 	private ListOfRequirements requirements;
 	private boolean approved;
 
-	public Course(String name) {
+	public Course(String name, ListOfRequirements requirements) {
 		this.name = name;
-		assignedTeacher = null;
-		requirements = new ListOfRequirements(this);
+		this.assignedTeacher = null;
+		this.requirements = requirements;
 	}
 
 	public String getCourseInfo() {
@@ -37,27 +38,6 @@ public class Course {
 
 	public void updateListOfRequirements(int timeExp, String availability, String backgroundDescription) {
 		
-		if (this.requirements == null) {
-			this.requirements = new ListOfRequirements(this, timeExp, availability, backgroundDescription);
-		} else {
-			this.requirements.updateAllRequirements(timeExp, availability, backgroundDescription);
-		}
-
-//		if ((timeExp == null) && (availability == null)) {
-//			// only Course-Name gets updated, no changes to the ListOfRequirements
-//		} else {
-//			if (this.requirements == null) {
-//				this.requirements = new ListOfRequirements(this, timeExp, availability);
-//			} else {
-//				if (timeExp == null) {
-//					this.requirements.update(availability);
-//				} else if (availability == null) {
-//					this.requirements.update(timeExp);
-//				} else {
-//					this.requirements.update(timeExp, availability);
-//				}
-//			}
-//		}
 	}
 
 	public void assingTeacher(Teacher t) {
@@ -97,8 +77,24 @@ public class Course {
 
 	public void assignRequirementsList(ListOfRequirements LoR) {
 		this.requirements = LoR;
-		LoR.setCorrespondingCourse(this);
-		// look at this as well Efra
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public ListOfRequirements getRequirements() {
+		return requirements;
+	}
+
+	public void setRequirements(ListOfRequirements requirements) {
+		this.requirements = requirements;
+	}
+	
+	
 }
 

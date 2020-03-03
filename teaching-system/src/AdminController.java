@@ -1,5 +1,6 @@
 
 import java.io.PrintStream;
+import java.sql.PseudoColumnUsage;
 import java.util.InputMismatchException;
 
 public class AdminController {
@@ -7,6 +8,10 @@ public class AdminController {
 	private InitialController initialController;
 	private Model modelobject;
 	private View viewObject;
+	private Administrator administrator;
+	PrintStream pStream; 
+
+	
 	
 	public AdminController(InitialController initialController, Model model, PrintStream ps) {
 		this.initialController = initialController;
@@ -17,15 +22,24 @@ public class AdminController {
 	
 	public void showSelectedOptionFromScreen() {
 		boolean finishAction = false;
+		
 		while(!finishAction) {
-			int input = this.viewObject.getUserInputInteger(this.modelobject.administratorView());
+			int input = this.viewObject.getUserInputInteger(administratorView());
+			int i = 1;
+			
 			try {
 				if (input == 1) {
+
+					administrator.createTeacher();
+									
 					
 					// Here is where the logic to create the new semester with the models and the database goes
 					
 				} else if(input == 2) {
-					// open previous semesters
+					for( Teacher t : this.administrator.getListOfUnassignedTeachers()) {
+						pStream.print(i+" : "+t.getName()+"\n");
+						i++;
+					}
 				} else if(input == 3) {
 				} else if(input == 4) {
 					finishAction = true;
@@ -36,6 +50,17 @@ public class AdminController {
 				System.out.println("noob");
 			}
 		}
+	}
+	
+	public String administratorView() {
+		return "---------------------------\n" +
+		 	   "|    Administrator View     |\n" +
+		       "---------------------------\n" +
+		       "--------- Actions ---------\n\n" +
+		       " 1: Add Teacher to System\n" +
+		       " 2: Assign Teacher to Courses with matching requirements\n" +
+		       " 3: Go back to the role-selecting-view\n\n" +
+		       "Enter the number for your selection and press 'Enter': ";
 	}
 
 }

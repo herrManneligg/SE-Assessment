@@ -111,6 +111,12 @@ public class CourseFileHandler extends FileHandler {
 		this.writeDatabaseFile(databaseObj);
 	}
 	
+	public HashMap<String, Object> getLastRegister() throws ParseException, IOException {
+		ArrayList<HashMap<String, Object>> coursesList = this.getAll();
+		int lastIndex = coursesList.size() - 1;
+		return coursesList.get(lastIndex);
+	}
+	
 	/**
 	 * Method that will return a single course by its ID
 	 * @param courseId

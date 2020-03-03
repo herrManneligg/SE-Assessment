@@ -92,5 +92,40 @@ public class Model {
 			   " 3: Go back\n\n" +
 			   "Enter the number for your selection: ";
 	}
+	
+	public String createNewCourseScreen() {
+		return "\n--- NEW COURSE ---\n\n" +
+			   " Write the name of the course \n" +
+			   " And the list of requirements \n\n";
+	}
+	
+	public String askCourseName() {
+		return "Course Name: ";
+	}
+	
+	public String askCourseTimeExp() {
+		return "Time of Experience: ";
+	}
+	
+	public String askCourseAvailability() {
+		return "Availability: ";
+	}
+	
+	public String askCoursebackgrounfOfTeacher() {
+		return "Background of teacher: ";
+	}
+	
+	public String newCourseCreatedMessage() {
+		return " --- New Course Created --- " +
+			   " Course Name: %s ";
+	}
+	
+	public String newCourseRequirementsCreatedMessage() {
+		return " --- New Course Created --- " +
+			   " Course Name: %s \n" +
+			   " Experience: %2d \n" + 
+			   " Availability: %s \n" + 
+			   " Background: %s";
+	}
 
 }

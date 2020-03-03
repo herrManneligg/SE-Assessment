@@ -12,6 +12,7 @@ public class Teacher extends Person {
 	private boolean inTraining;
 	private int timeExperience;
 	private String availability;
+	// background is representing the needed requirement as single skill - Marjan
 	private String background;
 	private Course assignedCourse;
 
