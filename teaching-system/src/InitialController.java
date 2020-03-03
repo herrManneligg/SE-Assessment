@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class InitialController {
 	
-	private InitialView view;
+	private View view;
 	private Model model;
 	private PrintStream ps;
 
 	public InitialController(PrintStream ps) {
 		this.model = new Model();
 		this.ps = ps;
-		this.view = new InitialView(this, this.model, ps);
+		this.view = new View(ps);
 		this.showSelectedScreen();
 	}
 	
@@ -23,7 +23,7 @@ public class InitialController {
 		boolean finishAction = false;
 		while(!finishAction) {
 			try {
-				int input = view.initialView();
+				int input = this.view.getUserInputInteger(this.model.getInitialViewInfo());
 				
 				if (input == 1) {
 					new ClassDirectorController(this, this.model, this.ps);

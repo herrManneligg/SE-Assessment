@@ -3,46 +3,41 @@ import java.util.InputMismatchException;
 
 public class ClassDirectorController {
 	
-	private ClassDirectorView classDirectorViewObject;
+	private View viewObject;
 	private InitialController initialController;
 	private Model model;
-	private PrintStream ps;
 	
 	public ClassDirectorController(InitialController initialController, Model model, PrintStream ps) {
 		this.initialController = initialController;
 		this.model = model;
-		this.ps = ps;
-		this.classDirectorViewObject = new ClassDirectorView(this, model, ps);
+		this.viewObject = new View(ps);
 		this.showSelectedOptionFromInitScreen();
 	}
 
-	public ClassDirectorView getClassDirectorViewObject() {
-		return classDirectorViewObject;
-	}
-
-	public void setClassDirectorViewObject(ClassDirectorView classDirectorViewObject) {
-		this.classDirectorViewObject = classDirectorViewObject;
+	public View getViewObject() {
+		return this.viewObject;
 	}
 	
 	public void showSelectedOptionFromInitScreen() {	
 		boolean finishAction = false;
 		while(!finishAction) {
-			int input = this.classDirectorViewObject.prinView();
+			int input = this.viewObject.getUserInputInteger(this.model.classDirectorView());
+			
 			try {
 				if (input == 1) {
-					this.classDirectorViewObject.print(this.model.createdNewSemester());
-					int year = Integer.valueOf(this.classDirectorViewObject.getUserInput(this.model.askYear()));
-					int semester = Integer.valueOf(this.classDirectorViewObject.getUserInput(this.model.askSemester()));
+					this.viewObject.printScreen(this.model.createdNewSemester());
+					int year = Integer.valueOf(this.viewObject.getUserInputInteger(this.model.askYear()));
+					int semester = Integer.valueOf(this.viewObject.getUserInputInteger(this.model.askSemester()));
 					
 					// Here is where the logic to create the new semester with the models and the database goes
 					int semesterId = 1; // <-- this is the example ID for the new semester
 					
-					this.classDirectorViewObject.print(this.model.semesterCreatesMessage());
+					this.viewObject.printScreen(this.model.semesterCreatesMessage());
 					this.showNewSemesterScreen(year, semester);
 				} else if(input == 2) {
-					this.classDirectorViewObject.print(this.model.selectSemester());
-					int year = Integer.valueOf(this.classDirectorViewObject.getUserInput(this.model.askYear()));
-					int semester = Integer.valueOf(this.classDirectorViewObject.getUserInput(this.model.askSemester()));
+					this.viewObject.printScreen(this.model.selectSemester());
+					int year = Integer.valueOf(this.viewObject.getUserInputInteger(this.model.askYear()));
+					int semester = Integer.valueOf(this.viewObject.getUserInputInteger(this.model.askSemester()));
 					
 					// logic to show the current semester
 					
@@ -59,15 +54,15 @@ public class ClassDirectorController {
 	}
 	
 	public void showNewSemesterScreen(int year, int semester) {
-		this.classDirectorViewObject.print(String.format(this.model.newSemesterAction(), year, semester));
-		this.classDirectorViewObject.getUserInput(this.model.classDirectorActions());
+		this.viewObject.printScreen(String.format(this.model.newSemesterAction(), year, semester));
+		this.viewObject.getUserInputInteger(this.model.classDirectorActions());
 		this.actionsInsideSemester();
 	}
 	
 	public void actionsInsideSemester() {
 		boolean finishAction = false;
 		while(!finishAction) {
-			int input = Integer.valueOf(this.classDirectorViewObject.getUserInput(this.model.actionsInsideSemesterInfo()));
+			int input = Integer.valueOf(this.viewObject.getUserInputInteger(this.model.actionsInsideSemesterInfo()));
 			try {
 				if (input == 1) {
 					System.out.println("Creating a course...");

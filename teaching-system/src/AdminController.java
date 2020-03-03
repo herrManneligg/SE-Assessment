@@ -4,22 +4,20 @@ import java.util.InputMismatchException;
 public class AdminController {
 	
 	private InitialController initialController;
-	private Model model;
-	private PrintStream ps;
-	private AdminView adminViewObject;
+	private Model modelobject;
+	private View viewObject;
 	
 	public AdminController(InitialController initialController, Model model, PrintStream ps) {
 		this.initialController = initialController;
-		this.model = model;
-		this.ps = ps;
-		this.adminViewObject = new AdminView(model, this, ps);
+		this.modelobject = model;
+		this.viewObject = new View(ps);
 		this.showSelectedOptionFromScreen();
 	}
 	
 	public void showSelectedOptionFromScreen() {
 		boolean finishAction = false;
 		while(!finishAction) {
-			int input = this.adminViewObject.prinView();
+			int input = this.viewObject.getUserInputInteger(this.modelobject.administratorView());
 			try {
 				if (input == 1) {
 					
