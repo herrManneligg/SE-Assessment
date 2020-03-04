@@ -53,7 +53,7 @@ public class Controller {
 				} else if (input == 2) {
 					new Administrator(this.view);
 				} else if (input == 3) {
-//					new PTTDirectorController(this, this.model, this.ps);
+					new PttDirector(this.view);
 				} else if (input == 4) {
 					System.out.println("Good bye!");
 					System.exit(0);
