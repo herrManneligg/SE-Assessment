@@ -1,4 +1,7 @@
+import java.io.IOException;
 import java.util.Date;
+
+import org.json.simple.parser.ParseException;
 
 public class Teacher extends Person {
 
@@ -16,12 +19,12 @@ public class Teacher extends Person {
 	private String background;
 	private Course assignedCourse;
 
-	public Teacher(String name, String email, int d, String av, String c) {
+	public Teacher(String name, String email, int timeExperience, String availability, String background) {
 		super(name, email);
-		timeExperience = d;
-		availability = av;
-		background = c;
-		inTraining = false;
+		this.timeExperience = timeExperience;
+		this.availability = availability;
+		this.background = background;
+		this.inTraining = false;
 	}
 
 	public String getBackground() {
@@ -74,6 +77,11 @@ public class Teacher extends Person {
 
 	public void setAvailability(String availability) {
 		this.availability = availability;
+	}
+	
+	public void save() throws ParseException, IOException {
+		TeacherFileHandler teacherFileHandler = new TeacherFileHandler();
+		teacherFileHandler.create(this.name, this.email, this.timeExperience, this.background, this.availability);
 	}
 
 }

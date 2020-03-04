@@ -120,11 +120,12 @@ public class ClassDirector {
 	public void actionsInsideSemester() {
 		boolean finishAction = false;
 		while(!finishAction) {
-			
+		
 			String message = "\nPlease enter the number that corresponds to your role and press 'Enter':\n\n" + 
-							 "   1: Create Course\n" + 
+							 "   1: Create Course\n" +
 							 "   2: Assign Course\n" + 
-							 "   3: Go Back\n" + 
+							 "   3: See courses in the list\n" +
+							 "   4: Go Back\n" + 
 							 "\nEnter the number for your selection: ";
 			int input = Integer.valueOf(this.viewObject.getUserInputInteger(message));
 			
@@ -146,6 +147,8 @@ public class ClassDirector {
 					this.listOfCourses.add(newCourse);
 					newCourse.save(this.semester.getDatasbaseId());
 					
+					this.viewObject.printScreen("\nCourse " + newCourse.getCourseName() + " added to the list\n");
+					
 				} else if(input == 2) {
 					message = "\n -------------------------\n" +
 					   		  "|    List of Courses    |\n" +
@@ -159,23 +162,56 @@ public class ClassDirector {
 							HashMap<String, Object> row = courseObject.get(i);
 							message += String.format(courseStringTpml, (i + 1), row.get("name"));
 						}
+						
+						message += "\n";
+						this.viewObject.printScreen(message);
+
+						
+						int selection = this.viewObject.getUserInputInteger("Enter the number for your selection: ");
+						
+						this.viewObject.printScreen("\nEnter the requirements for the course\n");
+						int timeExp = this.viewObject.getUserInputInteger("Experience of teacher: ");
+						String availability = this.viewObject.getUserInputString("Availability: ");
+						String background = this.viewObject.getUserInputString("Teacher background: ");
+						
+						ListOfRequirements courseRequirements = new ListOfRequirements(timeExp, availability, background);
+						Course tempCourse = new Course((String) courseObject.get(selection - 1).get("name"), courseRequirements);
+						tempCourse.setId((int) courseObject.get(selection - 1).get("id"));
+						this.listOfCourses.add(tempCourse);
+						this.semester.addACourse(this.semester.getDatasbaseId(), tempCourse);
+						
+						this.viewObject.printScreen("\nCourse " + this.listOfCourses.get(selection - 1).getCourseName() + " was added to the list\n");
+						
 					} else {
 						message += "There are no courses yet\n" +
 								   "Create courses\n\n";
+						this.viewObject.printScreen(message);
 					}
-					message += "\n";
-					this.viewObject.printScreen(message);
-//							ListOfRequirements tempRequirements = new ListOfRequirements((int) row.get("experience"), (String) row.get("availability"), (String) row.get("backgroundRequirement"));
-//					Course tempCourse = new Course((String) row.get("name"));
-//					tempCourse.setId((int) row.get("id"));
-//					this.listOfCourses.add(tempCourse);
-					
-					int selection = this.viewObject.getUserInputInteger("Enter the number for your selection: ");
-					this.semester.addACourse(this.semester.getDatasbaseId(), this.listOfCourses.get(selection - 1));
-					
-//					this.viewObject.printScreen("Course " + this.listOfCourses.get(selection - 1).getCourseName() + " added to the list");
-					
+				
 				} else if(input == 3) {
+					message = "\n -------------------------\n" +
+					   		  "|    List of Courses    |\n" +
+					   		  " -------------------------\n\n";
+					
+					
+					ArrayList<HashMap<String, Object>> courseObject = Semester.getCourses(this.semester.getDatasbaseId());
+					String courseStringTpml = "  %2d: %s    \n";
+					if(courseObject.size() > 0) {
+						for(int i = 0; i < courseObject.size(); i++) {
+							HashMap<String, Object> row = courseObject.get(i);
+							HashMap<String, Object> course = Course.findCourseInFile((int) row.get("course_id"));
+							message += String.format(courseStringTpml, (i + 1), course.get("name"));
+						}
+						
+						message += "\n";
+						this.viewObject.printScreen(message);
+						
+					} else {
+						message += "There are no courses yet\n" +
+								   "Create courses\n\n";
+						this.viewObject.printScreen(message);
+					}
+				} else if(input == 4) {
 					finishAction = true;
 				} else {
 					this.viewObject.printScreen("Enter a numerical value within the range");

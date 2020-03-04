@@ -25,13 +25,17 @@ public class View {
 	}
 
 	protected int getUserInputInteger(String message) {
-		int userResponse = -1;		
-		try {
-			System.out.print(message);
-			userResponse = this.input.nextInt();
-		} catch (InputMismatchException e) {
-			this.ps.print("Please use only numerical values!");
-			input.nextLine();
+		int userResponse = -1;
+		boolean action = false;
+		while(!action) {
+			try {
+				System.out.print(message);
+				userResponse = this.input.nextInt();
+				action = true;
+			} catch (InputMismatchException e) {
+				this.ps.print("Please use only numerical values!\n");
+				input.nextLine();
+			}
 		}
 		return userResponse;
 	}
@@ -40,8 +44,7 @@ public class View {
 		String userResponse = "";
 		try {
 			this.ps.print(message);
-
-			userResponse = this.input.nextLine();
+			userResponse = this.input.next();
 		} catch(IllegalArgumentException e) {
 			this.input.nextLine();
 			this.ps.print("Wrong choice of letter, try again\n");

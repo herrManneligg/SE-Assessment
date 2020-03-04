@@ -14,6 +14,8 @@ public class Semester {
 	public Semester(int year, int semesterNo) {
 		this.year = year;
 		this.semesterNo = semesterNo;
+		this.listOfCourses = new ArrayList<Course>();
+		this.listOfTeachers = new ArrayList<Teacher>();
 	}
 	
 	public int getYear() {
@@ -67,7 +69,7 @@ public class Semester {
 		fileHandler.addNewCourse(semesterId, course.getId(), course.getRequirements().getTimeExp(), course.getRequirements().getAvailability(), course.getRequirements().getBackgroundRequirement());
 	}
 	
-	public ArrayList<HashMap<String, Object>> getCourses(int semesterId) throws org.json.simple.parser.ParseException, IOException {
+	public static ArrayList<HashMap<String, Object>> getCourses(int semesterId) throws org.json.simple.parser.ParseException, IOException {
 		SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
 		return semesterFileHandler.getCoursesList(semesterId);
 	}

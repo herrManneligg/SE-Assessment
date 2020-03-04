@@ -123,5 +123,10 @@ public class Course {
 		}
 	}
 	
+	public static HashMap<String, Object> findCourseInFile(int courseId) throws IOException, org.json.simple.parser.ParseException {
+		CourseFileHandler courseFileHandler = new CourseFileHandler();
+		return courseFileHandler.find(courseId);
+	}
+	
 }
 

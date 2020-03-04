@@ -373,14 +373,16 @@ public class Administrator {
 		}
 
 		try {
-			listOfUnassignedTeachers.add(new Teacher(teacherName, teacherEmail, experience, semester, background));
+			Teacher newTeacher = new Teacher(teacherName, teacherEmail, experience, semester, background);
+			newTeacher.save();
+			this.listOfUnassignedTeachers.add(newTeacher);
 			System.out.println("\nTeacher " + teacherName + " created.\n");
 		} catch (Exception e) {
 			System.err.println(
 					"\n Something went wrong when creating the new teacher. Please, revise the teacher details and try again.");
 		}
 
-		in.close();
+//		in.close();
 	}
 
 	// Checking if the user input is alphabetical
