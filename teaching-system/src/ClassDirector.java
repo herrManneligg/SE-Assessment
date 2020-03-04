@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 public class ClassDirector extends Person {
 
 	private ArrayList<Course> listOfCourses;
-	private Semester semester;
 
 	public ClassDirector(View view) {
 		super("Class Director", "class.director@gmail.com", view);
@@ -40,7 +39,9 @@ public class ClassDirector extends Person {
 					this.createNewSemester();
 				} else if(input == 2) {
 					this.openSemester();
-					this.actionsInsideSemester();
+					if(this.getSemester() != null) {			
+						this.actionsInsideSemester();
+					}
 				} else if(input == 3) {
 					finishAction = true;
 				} else {
@@ -70,10 +71,8 @@ public class ClassDirector extends Person {
 			fileHandler.create(year, semester);
 			lastSemesterInfo = fileHandler.getLastSemesterRegister();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -135,7 +134,13 @@ public class ClassDirector extends Person {
 		this.listOfCourses.add(newCourse);
 		newCourse.save(this.getSemester().getDatasbaseId());
 		
-		this.getViewObject().printScreen("\nCourse " + newCourse.getCourseName() + " added to the list\n");
+		message = " -------------------- \n" +
+				  "| Created Course: " + newCourse.getCourseName() + " |\n" +
+				  "| Added to the year: " + this.getSemester().getYear() + " |\n" +
+				  "| semester: " + this.getSemester().getSemesterNo() + " |\n" +
+				  " -------------------- ";
+		
+		this.getViewObject().printScreen(message);
 	}
 	
 	private void assignCourseToList() throws IOException, ParseException {
@@ -146,28 +151,43 @@ public class ClassDirector extends Person {
 		
 		ArrayList<HashMap<String, Object>> courseObject = Course.getCourses();
 		String courseStringTpml = "  %2d: %s    \n";
-		if(courseObject.size() > 0) {
-			for(int i = 0; i < courseObject.size(); i++) {
-				HashMap<String, Object> row = courseObject.get(i);
-				message += String.format(courseStringTpml, (i + 1), row.get("name"));
+		ArrayList<HashMap<String, Object>> listOfUnassignedCourses = new ArrayList<HashMap<String, Object>>();
+		
+		int cont = 0;
+		for(int i = 0; i < courseObject.size(); i++) {
+			HashMap<String, Object> row = courseObject.get(i);
+			SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
+			boolean isCourseAssigned = semesterFileHandler.isCourseAssignedToSemester(this.getSemester().getDatasbaseId(), (int) row.get("id"));
+			if(!isCourseAssigned) {
+				listOfUnassignedCourses.add(row);
+				message += String.format(courseStringTpml, (cont + 1), row.get("name"));
+				cont++;
 			}
-			
+		}
+		
+		if(listOfUnassignedCourses.size() > 0) {
 			message += "\n";
 			this.getViewObject().printScreen(message);
 			
 			int selection = this.getViewObject().getUserInputInteger("Enter the number for your selection: ");
 			this.getViewObject().printScreen("\nEnter the requirements for the course\n");
 			
-			ListOfRequirements courseRequirements = addRequirementsToCourse();
-			Course tempCourse = new Course((String) courseObject.get(selection - 1).get("name"), courseRequirements);
-			tempCourse.setId((int) courseObject.get(selection - 1).get("id"));
+			ListOfRequirements courseRequirements = this.addRequirementsToCourse();
+			Course tempCourse = new Course((String) listOfUnassignedCourses.get(selection - 1).get("name"), courseRequirements);
+			tempCourse.setId((int) listOfUnassignedCourses.get(selection - 1).get("id"));
 			this.listOfCourses.add(tempCourse);
 			this.getSemester().addACourse(this.getSemester().getDatasbaseId(), tempCourse);
 			
-			this.getViewObject().printScreen("\nCourse " + this.listOfCourses.get(selection - 1).getCourseName() + " was added to the list\n");
+			message = " ------------------------- \n" +
+					  "| Created Course: " + tempCourse.getCourseName() + " |\n" +
+					  "| Added to the year: " + this.getSemester().getYear() + " |\n" +
+					  "| semester: " + this.getSemester().getSemesterNo() + " |\n" +
+					  " ------------------------- ";
+			
+			this.getViewObject().printScreen(message);
 			
 		} else {
-			message += "There are no courses yet\n" +
+			message += "There are no courses to assign\n" +
 					   "Create courses\n\n";
 			this.getViewObject().printScreen(message);
 		}
@@ -211,18 +231,8 @@ public class ClassDirector extends Person {
 		}
 	}
 
-	public Course selectCourse(String selectedCourse) {
-		for (int i = 0; i < listOfCourses.size(); i++) {
-			if (listOfCourses.get(i).getCourseName().equals(selectedCourse)) {
-				return listOfCourses.get(i);
-			}
-		}
-		System.out.println("That course does not exist.");
-		return null;
-	}
-
 	public ListOfRequirements addRequirementsToCourse() {
-		int timeExp = this.getViewObject().getUserInputInteger("Experience of teacher: ");
+		int timeExp = this.getViewObject().getUserInputInteger("Experience of teacher (in years): ");
 		String availability = this.getViewObject().getUserInputString("Availability: ");
 		String background = this.getViewObject().getUserInputString("Teacher background: ");
 		

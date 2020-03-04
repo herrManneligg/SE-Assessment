@@ -292,6 +292,16 @@ public class SemesterInfoFileHandler extends FileHandler {
 		return selectedSemesterTeachers;
 	}
 
+	public boolean isTeacherAssignedToCourse(int semesterId, int courseId, int teacherId) throws ParseException, IOException {
+		ArrayList<HashMap<String, Object>> coursesList = this.getCoursesList(semesterId);
+		for(HashMap<String, Object> row : coursesList) {
+			if((int) row.get("course_id") == courseId && (int) row.get("teacher_assigned") == teacherId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Add a new teacher to a given semester. It assigns from a teacher stored
 	 * previously in the system
@@ -672,6 +682,16 @@ public class SemesterInfoFileHandler extends FileHandler {
 		}
 	}
 
+	public boolean isCourseAssignedToSemester(int semesterId, int courseId) throws ParseException, IOException {
+		ArrayList<HashMap<String, Object>> coursesList = this.getCoursesList(semesterId);
+		for(HashMap<String, Object> row : coursesList) {
+			if((int) row.get("course_id") == courseId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void setCourseApproval(int semesterId, int courseId, boolean isApproved) throws ParseException, IOException {
 		try {

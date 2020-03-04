@@ -66,22 +66,27 @@ public abstract class Person {
 				  		 " ----------------\n\n";
 		
 		ArrayList<HashMap<String, Object>> semesters = Semester.getSemesters();
-		String semesterTpml = " %1d: year: %s - semester: %1d \n";
-		for(int i = 0; i < semesters.size(); i++) {
-			HashMap<String, Object> row = semesters.get(i);
-			message += String.format(semesterTpml, (i + 1), row.get("year"), row.get("semester_no"));
+		
+		if(semesters.size() > 0) {
+			String semesterTpml = " %1d: year: %s - semester: %1d \n";
+			for(int i = 0; i < semesters.size(); i++) {
+				HashMap<String, Object> row = semesters.get(i);
+				message += String.format(semesterTpml, (i + 1), row.get("year"), row.get("semester_no"));
+			}
+			message += "\n";
+			this.viewObject.printScreen(message);
+			int selection = this.viewObject.getUserInputInteger("Enter the number of the semester you want to see: ");
+			
+			this.setSemesterInfo(semesters.get(selection - 1));
+			
+			message = "\n -------------------------\n" +
+			   		  "| Year %4d - Semester %2d |\n" +
+			   		  " -------------------------\n\n";
+	
+			this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
+		} else {
+			this.viewObject.printScreen("\n--- There are no Semesters, create one! ---\n\n");
 		}
-		message += "\n";
-		this.viewObject.printScreen(message);
-		int selection = this.viewObject.getUserInputInteger("Enter the number of the semester you want to see: ");
-		
-		this.setSemesterInfo(semesters.get(selection - 1));
-		
-		message = "\n -------------------------\n" +
-		   		  "| Year %4d - Semester %2d |\n" +
-		   		  " -------------------------\n\n";
-
-		this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
 		
 	}
 	
