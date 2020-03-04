@@ -93,7 +93,7 @@ public class PttDirector extends Person {
 		 	   		 "|    " + this.listOfCourses.get(input - 1).getCourseName() + "     |\n" +
 		 	   		 "---------------------------\n" +
 					 "| Experience: " + this.listOfCourses.get(input - 1).getRequirements().getTimeExp() + " |\n" +
-					 "| Avalability: " + this.listOfCourses.get(input - 1).getRequirements().getAvailability() + " |\n" +
+					 "| Availability: " + this.listOfCourses.get(input - 1).getRequirements().getAvailability() + " |\n" +
 					 "| Background: " + this.listOfCourses.get(input - 1).getRequirements().getBackgroundRequirement() + " |\n" +
 					 " -------------------------- \n";
 			
@@ -104,7 +104,7 @@ public class PttDirector extends Person {
 					 " ---------------------------\n" + 
 					 "| Name: " + teacher.getName() + " |\n" +
 					 "| Experience: " + teacher.getTimeExperience() + " |\n" +
-					 "| Avalability: " + teacher.getAvailability() + " |\n" +
+					 "| Availability: " + teacher.getAvailability() + " |\n" +
 					 "| Background: " + teacher.getBackground() + " |\n" +
 					 " -------------------------- \n\n";
 			this.getViewObject().printScreen(message);
@@ -124,7 +124,7 @@ public class PttDirector extends Person {
 					action = true;
 					messageOfDesition = "\nTeacher Request Declined\n";
 				} else {
-					this.getViewObject().printScreen("\n Please enter Y or N \n\n");
+					this.getViewObject().printScreen("\n Please enter 'Y' for yes or 'N' for no \n\n");
 				}
 			}
 			
@@ -137,7 +137,7 @@ public class PttDirector extends Person {
 				e.printStackTrace();
 			}
 		} else {
-			message += " There is no requests \n\n";
+			message += " There are no requests \n\n";
 			this.getViewObject().printScreen(message);
 		}
 		

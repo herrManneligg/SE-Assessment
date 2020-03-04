@@ -28,7 +28,7 @@ public class ClassDirector extends Person {
 				       " --------------------------\n" +
 				       "--------- Actions ---------\n\n" +
 				       " 1: Create New Semester\n" +
-				       " 2: Open previous Semester\n" +
+				       " 2: Display previously entered semesters\n" +
 				       " 3: Go back\n\n" +
 				       "Enter the number for your selection: ";
 			
@@ -59,8 +59,8 @@ public class ClassDirector extends Person {
 	
 	private void createNewSemester() {
 		this.getViewObject().printScreen("\n\n--- Enter the YEAR and SEMESTER ---\n");
-		int year = Integer.valueOf(this.getViewObject().getUserInputInteger("Enter the Year: "));
-		int semester = Integer.valueOf(this.getViewObject().getUserInputInteger("Enter the Semester: "));
+		int year = Integer.valueOf(this.getViewObject().getUserInputInteger("Enter the year: "));
+		int semester = Integer.valueOf(this.getViewObject().getUserInputInteger("Enter the semester: "));
 		
 		this.setSemester(new Semester(year, semester));
 		SemesterInfoFileHandler fileHandler;
@@ -78,7 +78,7 @@ public class ClassDirector extends Person {
 		
 		this.getSemester().setDatasbaseId((int) lastSemesterInfo.get("id"));
 		
-		this.getViewObject().printScreen("\n\nNew Semester Created\n");
+		this.getViewObject().printScreen("\n\nNew Semester created\n");
 		
 		String message = "\n -------------------------\n" +
 				   		 "| Year %4d - Semester %2d |\n" +
@@ -93,8 +93,8 @@ public class ClassDirector extends Person {
 		while(!finishAction) {
 		
 			String message = "\nPlease enter the number that corresponds to your role and press 'Enter':\n\n" + 
-							 "   1: Create Course\n" +
-							 "   2: Assign Course\n" + 
+							 "   1: Create course\n" +
+							 "   2: Assign course to the teacher\n" + 
 							 "   3: See courses in the list\n" +
 							 "   4: Go Back\n" + 
 							 "\nEnter the number for your selection: ";
@@ -125,9 +125,9 @@ public class ClassDirector extends Person {
 		   		  		 "|       New Course       |\n" +
 		   		  		 " -------------------------\n" +
 		   		  		 " Write the name of the course \n" +
-		   		  		 " And the list of requirements \n\n";
+		   		  		 " and the list of requirements \n\n";
 		this.getViewObject().printScreen(message);
-		String courseName = this.getViewObject().getUserInputString("Enter the name: ");
+		String courseName = this.getViewObject().getUserInputString("Enter the name for the Course: ");
 		
 		ListOfRequirements courseRequirements = addRequirementsToCourse();
 		Course newCourse = new Course(courseName, courseRequirements);
@@ -136,8 +136,8 @@ public class ClassDirector extends Person {
 		
 		message = " -------------------- \n" +
 				  "| Created Course: " + newCourse.getCourseName() + " |\n" +
-				  "| Added to the year: " + this.getSemester().getYear() + " |\n" +
-				  "| semester: " + this.getSemester().getSemesterNo() + " |\n" +
+				  "| Added to the Year: " + this.getSemester().getYear() + " |\n" +
+				  "| Semester: " + this.getSemester().getSemesterNo() + " |\n" +
 				  " -------------------- ";
 		
 		this.getViewObject().printScreen(message);
@@ -170,7 +170,7 @@ public class ClassDirector extends Person {
 			this.getViewObject().printScreen(message);
 			
 			int selection = this.getViewObject().getUserInputInteger("Enter the number for your selection: ");
-			this.getViewObject().printScreen("\nEnter the requirements for the course\n");
+			this.getViewObject().printScreen("\nEnter the requirements needed for the Course\n");
 			
 			ListOfRequirements courseRequirements = this.addRequirementsToCourse();
 			Course tempCourse = new Course((String) listOfUnassignedCourses.get(selection - 1).get("name"), courseRequirements);
@@ -180,14 +180,14 @@ public class ClassDirector extends Person {
 			
 			message = " ------------------------- \n" +
 					  "| Created Course: " + tempCourse.getCourseName() + " |\n" +
-					  "| Added to the year: " + this.getSemester().getYear() + " |\n" +
-					  "| semester: " + this.getSemester().getSemesterNo() + " |\n" +
+					  "| Added to the Year: " + this.getSemester().getYear() + " |\n" +
+					  "| Semester: " + this.getSemester().getSemesterNo() + " |\n" +
 					  " ------------------------- ";
 			
 			this.getViewObject().printScreen(message);
 			
 		} else {
-			message += "There are no courses to assign\n" +
+			message += "There are no courses to assign to\n" +
 					   "Create courses\n\n";
 			this.getViewObject().printScreen(message);
 		}
@@ -244,7 +244,7 @@ public class ClassDirector extends Person {
 			if (listOfCourses.get(i) == selectedCourse) {
 				listOfCourses.remove(i);
 			} else {
-				System.out.println("That course does not exists.");
+				System.out.println("That course does not exist.");
 			}
 		}
 	}

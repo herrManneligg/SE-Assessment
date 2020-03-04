@@ -47,7 +47,7 @@ public class Controller {
 				} else if (input == 3) {
 					new PttDirector(this.view);
 				} else if (input == 4) {
-					System.out.println("Good bye!");
+					System.out.println("Goodbye!");
 					System.exit(0);
 				} else {
 					System.out.println("Enter a numerical value within the range");
