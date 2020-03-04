@@ -4,9 +4,6 @@ public class ListOfRequirements {
 	private int timeExp; // years of experience
 	private String availability; // the semester in which it should be available
 	private String backgroundRequirement;
-	private ArrayList<String> listOfBackgroundsRequirements; // -Marjan added for Filter-Method
-
-// is there any case where we would have a list of requirements without a course?
 
 	// When a new course is created, it can be created without requirements; in that case it will have default requirements
 	public ListOfRequirements(int timeExp, String availability, String backgroundRequirement) {		
@@ -51,14 +48,6 @@ public class ListOfRequirements {
 
 	public void setBackgroundRequirement(String backgroundRequirement) {
 		this.backgroundRequirement = backgroundRequirement;
-	}
-
-	public ArrayList<String> getListOfBackgroundsRequirements() {
-		return listOfBackgroundsRequirements;
-	}
-
-	public void setListOfBackgroundsRequirements(ArrayList<String> listOfBackgroundsRequirements) {
-		this.listOfBackgroundsRequirements = listOfBackgroundsRequirements;
 	}
 
 }

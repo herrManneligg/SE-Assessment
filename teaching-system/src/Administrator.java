@@ -1,18 +1,121 @@
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Administrator extends Person {
+import org.json.simple.parser.ParseException;
+
+public class Administrator {
 
 	private ArrayList<Course> listOfCourses;
 	private ArrayList<Teacher> listOfUnassignedTeachers;
 	private ClassDirector classDirector;
+	private Semester semester;
+	private View viewObject;
 
-	public Administrator(String name, String email, ClassDirector classDirector) {
-		super(name, email);
+	public Administrator(View view) {
+		this.viewObject = view;
+		listOfUnassignedTeachers = new ArrayList<>();
+//		this.listOfCourses = classDirector.getListOfCourses();
+		try {
+			this.showSemesterSelection();
+		} catch (IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public Administrator(ClassDirector classDirector) {
+//		super(name, email);
 		listOfUnassignedTeachers = new ArrayList<>();
 		this.classDirector = classDirector;
 		this.listOfCourses = classDirector.getListOfCourses();
+	}
+	
+	private void getCourses() throws IOException, ParseException {
+		ArrayList<HashMap<String, Object>> courseObject = Course.getCourses();
+		
+		for(int i = 0; i < courseObject.size(); i++) {
+			HashMap<String, Object> row = courseObject.get(i);
+//			timeExp, availability, background
+//			ListOfRequirements listOfRequirements = new ListOfRequirements(row.get(""));
+//			Course tempCourse = new Course(row.get("name"));
+//			this.listOfCourses.add(tempCourse);
+		}
+		
+	}
+	
+	public void showSemesterSelection() throws IOException, ParseException {
+		String message = "\n ----------------\n" +
+				  		 "|    Semesters   |\n" +
+				  		 " ----------------\n\n";
+		
+		ArrayList<HashMap<String, Object>> semesters = Semester.getSemesters();
+		String semesterTpml = " %1d: year: %s - semester: %1d \n";
+		for(int i = 0; i < semesters.size(); i++) {
+			HashMap<String, Object> row = semesters.get(i);
+			message += String.format(semesterTpml, (i + 1), row.get("year"), row.get("semester_no"));
+		}
+		message += "\n";
+		this.viewObject.printScreen(message);
+		int selection = this.viewObject.getUserInputInteger("Enter the number of the semester you want to see: ");
+		
+		this.setSemesterInfo(semesters.get(selection - 1));
+		
+		message = "\n -------------------------\n" +
+		   		  "| Year %4d - Semester %2d |\n" +
+		   		  " -------------------------\n\n";
+
+		this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
+		this.getCourses();
+		this.showSelectedOptionFromScreen();
+
+	}
+	
+	private void setSemesterInfo(HashMap<String, Object> selectedSemester) {
+		this.semester = new Semester((int) selectedSemester.get("year"), (int) selectedSemester.get("semester_no"));
+		this.semester.setDatasbaseId((int) selectedSemester.get("id"));
+	}
+	
+	public void showSelectedOptionFromScreen() {
+		boolean finishAction = false;
+		
+		while(!finishAction) {
+			String message = "---------------------------\n" +
+				 	   		 "|    Administrator View     |\n" +
+				 	   		 "---------------------------\n" +
+				 	   		 "--------- Actions ---------\n\n" +
+				 	   		 " 1: Add Teacher to System\n" +
+				 	   		 " 2: Assign Teacher to Courses with matching requirements\n" +
+				 	   		 " 3: Go back to the role-selecting-view\n\n" +
+				 	   		 "Enter the number for your selection and press 'Enter': ";
+			int input = this.viewObject.getUserInputInteger(message);
+			int i = 1;
+			
+			try {
+				if (input == 1) {
+
+					this.createTeacher();
+									
+					
+					// Here is where the logic to create the new semester with the models and the database goes
+					
+				} else if(input == 2) {
+					for( Teacher t : this.getListOfUnassignedTeachers()) {
+						this.viewObject.printScreen(i+" : "+t.getName()+"\n");
+						i++;
+					}
+				} else if(input == 3) {
+				} else if(input == 4) {
+					finishAction = true;
+				} else {
+					System.out.println("Enter a numerical value within the range");
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("noob");
+			}
+		}
 	}
 
 	// Getting the ArrayList of courses
@@ -25,16 +128,16 @@ public class Administrator extends Person {
 
 		ArrayList<Course> filteredCourse = new ArrayList<Course>();
 
-		for (Course c : listOfCourses) {
-			for (String requirement : c.getRequirements().getListOfBackgroundsRequirements()) {
-				if (requirement.equals(teacher.getBackground())) {
-					filteredCourse.add(c);
-					break;
-				} else {
-					continue;
-				}
-			}
-		}
+//		for (Course c : listOfCourses) {
+//			for (String requirement : c.getRequirements().getListOfBackgroundsRequirements()) {
+//				if (requirement.equals(teacher.getBackground())) {
+//					filteredCourse.add(c);
+//					break;
+//				} else {
+//					continue;
+//				}
+//			}
+//		}
 		return filteredCourse;
 
 	}

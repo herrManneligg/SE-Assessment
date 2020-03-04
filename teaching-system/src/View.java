@@ -25,29 +25,13 @@ public class View {
 	}
 
 	protected int getUserInputInteger(String message) {
-
-		int userResponse = -1;
-
-		while (true) {
-			try {
-
-				System.out.print(message);
-				userResponse = this.input.nextInt();
-
-				if (userResponse != 1 && userResponse != 2 && userResponse != 3 && userResponse!=4) {
-					this.ps.print("Only use numbers between 1 and 4");
-
-				} else {
-					break;
-				}
-
-			} catch (InputMismatchException e) {
-				this.ps.print("Pls use only numerical values!");
-				// this.ps.print(e);
-				input.nextLine();
-
-			}
-
+		int userResponse = -1;		
+		try {
+			System.out.print(message);
+			userResponse = this.input.nextInt();
+		} catch (InputMismatchException e) {
+			this.ps.print("Please use only numerical values!");
+			input.nextLine();
 		}
 		return userResponse;
 	}
@@ -56,9 +40,13 @@ public class View {
 		String userResponse = "";
 		try {
 			this.ps.print(message);
+
 			userResponse = this.input.nextLine();
-		} catch (IllegalArgumentException e) {
-			this.ps.print(e);
+		} catch(IllegalArgumentException e) {
+			this.input.nextLine();
+			this.ps.print("Wrong choice of letter, try again\n");
+			getUserInputString(message);
+
 		}
 		return userResponse;
 	}

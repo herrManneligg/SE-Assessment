@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Course {
@@ -8,6 +12,11 @@ public class Course {
 	private ListOfRequirements requirements;
 	private boolean approved;
 
+	public Course(String name) {
+		this.name = name;
+		this.assignedTeacher = null;
+	}
+	
 	public Course(String name, ListOfRequirements requirements) {
 		this.name = name;
 		this.assignedTeacher = null;
@@ -95,6 +104,24 @@ public class Course {
 		this.requirements = requirements;
 	}
 	
+	public static ArrayList<HashMap<String, Object>> getCourses() throws IOException, org.json.simple.parser.ParseException {
+		CourseFileHandler newCourse = new CourseFileHandler();
+		return newCourse.getAll();
+	}
+	
+	public void save(int semesterId) throws org.json.simple.parser.ParseException {
+		try {
+			CourseFileHandler newCourse = new CourseFileHandler();
+			newCourse.create(this.name);
+			HashMap<String, Object> lastRegister = newCourse.getLastRegister();
+			SemesterInfoFileHandler semeserInfo = new SemesterInfoFileHandler();
+			this.setId((int) lastRegister.get("id"));
+			semeserInfo.addNewCourse(semesterId, (int) lastRegister.get("id"), this.requirements.getTimeExp(), this.requirements.getAvailability(), this.requirements.getBackgroundRequirement());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
 
