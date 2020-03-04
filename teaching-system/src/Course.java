@@ -86,7 +86,12 @@ public class Course {
 		return info;
 
 	}
+		SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
+		semesterFileHandler.setCourseApproval(semesterId, courseId, desition);
+	}
+	
 }
+<<<<<<< HEAD
 =======
 import java.util.Date;
 
@@ -191,3 +196,6 @@ public class Course {
 
 }
 >>>>>>> d85a8bb8071934a95bb4dc9993b05ee09b4ed8ab
+=======
+
+>>>>>>> master
