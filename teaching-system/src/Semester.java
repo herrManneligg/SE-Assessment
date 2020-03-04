@@ -74,4 +74,9 @@ public class Semester {
 		return semesterFileHandler.getCoursesList(semesterId);
 	}
 	
+	public static ArrayList<HashMap<String, Object>> getTeachers(int semesterId) throws org.json.simple.parser.ParseException, IOException {
+		SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
+		return semesterFileHandler.getTeachersList(semesterId);
+	}
+	
 }

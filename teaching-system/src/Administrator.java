@@ -6,76 +6,33 @@ import java.util.Scanner;
 
 import org.json.simple.parser.ParseException;
 
-public class Administrator {
+public class Administrator extends Person {
 
 	private ArrayList<Course> listOfCourses;
 	private ArrayList<Teacher> listOfUnassignedTeachers;
 	private ClassDirector classDirector;
-	private Semester semester;
-	private View viewObject;
 
 	public Administrator(View view) {
-		this.viewObject = view;
-		listOfUnassignedTeachers = new ArrayList<>();
-//		this.listOfCourses = classDirector.getListOfCourses();
+		super("Administrator", "admin@gmail.com", view);
+		this.listOfUnassignedTeachers = new ArrayList<Teacher>();
+		this.listOfCourses = new ArrayList<Course>();
 		try {
-			this.showSemesterSelection();
+			this.openSemester();
+			this.fillListOfCourses();
+			this.fillListOfTeachers();
 		} catch (IOException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.showSelectedOptionFromScreen();
 	}
 	
-	public Administrator(ClassDirector classDirector) {
-//		super(name, email);
-		listOfUnassignedTeachers = new ArrayList<>();
+	public Administrator(ClassDirector classDirector, View view) {
+		super("Administrator", "admin@gmail.com", view);
+		listOfUnassignedTeachers = new ArrayList<Teacher>();
 		this.classDirector = classDirector;
 		this.listOfCourses = classDirector.getListOfCourses();
-	}
-	
-	private void getCourses() throws IOException, ParseException {
-		ArrayList<HashMap<String, Object>> courseObject = Course.getCourses();
-		
-		for(int i = 0; i < courseObject.size(); i++) {
-			HashMap<String, Object> row = courseObject.get(i);
-//			timeExp, availability, background
-//			ListOfRequirements listOfRequirements = new ListOfRequirements(row.get(""));
-//			Course tempCourse = new Course(row.get("name"));
-//			this.listOfCourses.add(tempCourse);
-		}
-		
-	}
-	
-	public void showSemesterSelection() throws IOException, ParseException {
-		String message = "\n ----------------\n" +
-				  		 "|    Semesters   |\n" +
-				  		 " ----------------\n\n";
-		
-		ArrayList<HashMap<String, Object>> semesters = Semester.getSemesters();
-		String semesterTpml = " %1d: year: %s - semester: %1d \n";
-		for(int i = 0; i < semesters.size(); i++) {
-			HashMap<String, Object> row = semesters.get(i);
-			message += String.format(semesterTpml, (i + 1), row.get("year"), row.get("semester_no"));
-		}
-		message += "\n";
-		this.viewObject.printScreen(message);
-		int selection = this.viewObject.getUserInputInteger("Enter the number of the semester you want to see: ");
-		
-		this.setSemesterInfo(semesters.get(selection - 1));
-		
-		message = "\n -------------------------\n" +
-		   		  "| Year %4d - Semester %2d |\n" +
-		   		  " -------------------------\n\n";
-
-		this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
-		this.getCourses();
-		this.showSelectedOptionFromScreen();
-
-	}
-	
-	private void setSemesterInfo(HashMap<String, Object> selectedSemester) {
-		this.semester = new Semester((int) selectedSemester.get("year"), (int) selectedSemester.get("semester_no"));
-		this.semester.setDatasbaseId((int) selectedSemester.get("id"));
 	}
 	
 	public void showSelectedOptionFromScreen() {
@@ -90,30 +47,21 @@ public class Administrator {
 				 	   		 " 2: Assign Teacher to Courses with matching requirements\n" +
 				 	   		 " 3: Go back to the role-selecting-view\n\n" +
 				 	   		 "Enter the number for your selection and press 'Enter': ";
-			int input = this.viewObject.getUserInputInteger(message);
+			int input = this.getViewObject().getUserInputInteger(message);
 			int i = 1;
 			
 			try {
 				if (input == 1) {
-
 					this.createTeacher();
-									
-					
-					// Here is where the logic to create the new semester with the models and the database goes
-					
 				} else if(input == 2) {
-					for( Teacher t : this.getListOfUnassignedTeachers()) {
-						this.viewObject.printScreen(i+" : "+t.getName()+"\n");
-						i++;
-					}
+					this.assignTeacherToCourse();
 				} else if(input == 3) {
-				} else if(input == 4) {
 					finishAction = true;
 				} else {
 					System.out.println("Enter a numerical value within the range");
 				}
-			} catch (InputMismatchException e) {
-				System.out.println("noob");
+			} catch (InputMismatchException | ParseException | IOException e) {
+				System.out.println("An error ocurred");
 			}
 		}
 	}
@@ -122,24 +70,30 @@ public class Administrator {
 	public ArrayList<Course> getListOfCourses() {
 		return listOfCourses;
 	}
-
-// Marjan: Method for getting a filtered list of Courses (requirements are matched with teacher background)
-	public ArrayList<Course> getFilteredListOfCourses(Teacher teacher) {
-
-		ArrayList<Course> filteredCourse = new ArrayList<Course>();
-
-//		for (Course c : listOfCourses) {
-//			for (String requirement : c.getRequirements().getListOfBackgroundsRequirements()) {
-//				if (requirement.equals(teacher.getBackground())) {
-//					filteredCourse.add(c);
-//					break;
-//				} else {
-//					continue;
-//				}
-//			}
-//		}
-		return filteredCourse;
-
+	
+	public void fillListOfCourses() throws IOException, ParseException {
+		ArrayList<HashMap<String, Object>> listOfCourses = Semester.getCourses(this.getSemester().getDatasbaseId());
+		for(int i = 0; i < listOfCourses.size(); i++) {
+			HashMap<String, Object> row = listOfCourses.get(i);
+			HashMap<String, Object> courseTemp = Course.findCourseInFile((int) row.get("course_id"));
+			ListOfRequirements listOfRequirements = new ListOfRequirements((int) row.get("experience"), (String) row.get("availability"), (String) row.get("backgroundRequirement"));
+			Course course = new Course((String) courseTemp.get("name"), listOfRequirements);
+			course.setId((int) row.get("course_id"));
+			if(row.get("teacher_assigned") == null) {
+				this.listOfCourses.add(course);
+			}
+		}
+	}
+	
+	public void fillListOfTeachers() throws IOException, ParseException {
+		ArrayList<HashMap<String, Object>> listOfTeachers = Teacher.getTeachers();
+		for(int i = 0; i < listOfTeachers.size(); i++) {
+			HashMap<String, Object> row = listOfTeachers.get(i);
+			HashMap<String, Object> teacherTemp = Teacher.findTeacherInFile((int) row.get("id"));
+			Teacher teacherObject = new Teacher((String) teacherTemp.get("name"), (String) teacherTemp.get("email"), (int) teacherTemp.get("time_experience"), (String) teacherTemp.get("availability"), (String) teacherTemp.get("background"));
+			teacherObject.setId((int) row.get("id"));
+			this.listOfUnassignedTeachers.add(teacherObject);
+		}
 	}
 
 	// Setting the ArrayList of courses
@@ -195,13 +149,47 @@ public class Administrator {
 
 	// Assigning a teacher to a course
 	// getAvailableCoursesForTeacher - Marjan
-	public void assignTeacherToCourse(Course course, Teacher teacher) {
-		for (int i = 0; i < listOfCourses.size(); i++) {
-			if (listOfCourses.get(i) == course) {
-				listOfCourses.get(i).assingTeacher(teacher);
-				teacher.setAssignedCourse(course);
-				listOfUnassignedTeachers.remove(teacher);
+	public void assignTeacherToCourse() throws ParseException, IOException {
+		
+		String message = "\n ----------------\n" +
+						 "| Select a course |\n" +
+						 " ------------------\n\n";
+		String courseStringTpml = "  %2d: %s    \n";
+		int i = 1;
+		if(this.listOfCourses.size() <= 0) {
+			message += " There is no courses \n\n";
+			this.getViewObject().printScreen(message);
+		} else {
+			for(Course course : this.listOfCourses) {
+				message += String.format(courseStringTpml, i++, course.getCourseName());
 			}
+			message += "\n";
+			this.getViewObject().printScreen(message);
+			int courseSelection = this.getViewObject().getUserInputInteger("Enter the number for your selection: ");
+			
+			message = "\n ----------------\n" +
+					 "|  Course Details  |\n" +
+					 "|  " + this.listOfCourses.get(courseSelection - 1).getCourseName() + "  |\n" +
+					 " ------------------\n\n" +
+					 " Experience: " + this.listOfCourses.get(courseSelection - 1).getRequirements().getTimeExp() + "\n" +
+					 " Avalability: " + this.listOfCourses.get(courseSelection - 1).getRequirements().getAvailability() + "\n" +
+					 " Background: " + this.listOfCourses.get(courseSelection - 1).getRequirements().getBackgroundRequirement() + "\n\n" +
+					 " --- Teachers to assign --- \n";
+			
+			if(this.listOfUnassignedTeachers.size() > 0) {
+				String teacherStringTpml = "%2d: %s | Experience: %s | Background: %s | Availability: %s \n";
+				i = 1;
+				for(Teacher teacher : this.listOfUnassignedTeachers) {
+					message += String.format(teacherStringTpml, i++, teacher.getName(), teacher.getTimeExperience(), teacher.getBackground(), teacher.getAvailability());
+				}
+				message += "\nEnter the number of the teacher you want to assign: ";
+				int teacherSelection = this.getViewObject().getUserInputInteger(message);
+				this.listOfUnassignedTeachers.get(teacherSelection - 1).assignCourse(this.getSemester().getDatasbaseId(), this.listOfCourses.get(courseSelection - 1));
+				message = "Teacher " + this.listOfUnassignedTeachers.get(teacherSelection - 1).getName() + " assigned to course " + this.listOfCourses.get(courseSelection - 1).getCourseName() + " \n\n";
+			} else {
+				message += "\nThere are no teachers yet, create one\n\n";
+			}
+			this.getViewObject().printScreen(message);
 		}
 	}
 

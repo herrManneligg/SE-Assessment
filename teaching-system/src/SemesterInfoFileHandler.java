@@ -93,9 +93,8 @@ public class SemesterInfoFileHandler extends FileHandler {
 				}
 				courses_hashmap.put("approved", (boolean) current_course.get("approved"));
 				courses_hashmap.put("experience", (int) (long) current_course.get("experience"));
-				courses_hashmap.put("grade", (String) current_course.get("grade"));
-				courses_hashmap.put("course", (String) current_course.get("course"));
-				courses_hashmap.put("notes", (String) current_course.get("notes"));
+				courses_hashmap.put("availability", (String) current_course.get("availability"));
+				courses_hashmap.put("backgroundRequirement", (String) current_course.get("backgroundRequirement"));
 
 				// then we add the info to the array
 				coursesList.add(courses_hashmap);

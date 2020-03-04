@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.json.simple.parser.ParseException;
 
@@ -13,6 +15,7 @@ public class Teacher extends Person {
 	// the position.
 	
 	private boolean inTraining;
+	private int id;
 	private int timeExperience;
 	private String availability;
 	// background is representing the needed requirement as single skill - Marjan
@@ -34,9 +37,17 @@ public class Teacher extends Person {
 	public void setBackground(String background) {
 		this.background = background;
 	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getAssignedCourse() {
-		return assignedCourse != null ? assignedCourse.getCourseName() : name + " is not assigned to a course.";
+		return assignedCourse != null ? assignedCourse.getCourseName() : this.getName() + " is not assigned to a course.";
 	}
 
 	public void setAssignedCourse(Course assignedCourse) {
@@ -79,9 +90,25 @@ public class Teacher extends Person {
 		this.availability = availability;
 	}
 	
+	public void assignCourse(int semesterId, Course course) throws IOException, org.json.simple.parser.ParseException {
+		this.assignedCourse = course;
+		SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
+		semesterFileHandler.assignTeacherToCourse(semesterId, course.getId(), this.id);
+	}
+	
 	public void save() throws ParseException, IOException {
 		TeacherFileHandler teacherFileHandler = new TeacherFileHandler();
-		teacherFileHandler.create(this.name, this.email, this.timeExperience, this.background, this.availability);
+		teacherFileHandler.create(this.getName(), this.getEmail(), this.timeExperience, this.background, this.availability);
+	}
+	
+	public static ArrayList<HashMap<String, Object>> getTeachers() throws org.json.simple.parser.ParseException, IOException {
+		TeacherFileHandler teachersFileHandler = new TeacherFileHandler();
+		return teachersFileHandler.getAll();
+	}
+	
+	public static HashMap<String, Object> findTeacherInFile(int teacherId) throws IOException, org.json.simple.parser.ParseException {
+		TeacherFileHandler teacherFileHandler = new TeacherFileHandler();
+		return teacherFileHandler.find(teacherId);
 	}
 
 }

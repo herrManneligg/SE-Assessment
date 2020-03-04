@@ -1,12 +1,26 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+
+import org.json.simple.parser.ParseException;
 
 public abstract class Person {
 	
-	String name;
-	String email;
+	private String name;
+	private String email;
+	private View viewObject;
+	private Semester semester;
 
-	public Person(String n, String em) {
-		this.name = n;
-		this.email = em;
+	public Person(String name, String email) {
+		this.name = name;
+		this.email = email;
+	}
+	
+	public Person(String name, String email, View view) {
+		this.name = name;
+		this.email = email;
+		this.viewObject = view;
 	}
 
 	public String getName() {
@@ -24,4 +38,51 @@ public abstract class Person {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public View getViewObject() {
+		return viewObject;
+	}
+
+	public void setViewObject(View view) {
+		this.viewObject = view;
+	}
+	
+	public Semester getSemester() {
+		return semester;
+	}
+
+	public void setSemester(Semester semester) {
+		this.semester = semester;
+	}
+	
+	private void setSemesterInfo(HashMap<String, Object> selectedSemester) {
+		this.semester = new Semester((int) selectedSemester.get("year"), (int) selectedSemester.get("semester_no"));
+		this.semester.setDatasbaseId((int) selectedSemester.get("id"));
+	}
+	
+	protected void openSemester() throws IOException, ParseException {
+		String message = "\n ----------------\n" +
+				  		 "|    Semesters   |\n" +
+				  		 " ----------------\n\n";
+		
+		ArrayList<HashMap<String, Object>> semesters = Semester.getSemesters();
+		String semesterTpml = " %1d: year: %s - semester: %1d \n";
+		for(int i = 0; i < semesters.size(); i++) {
+			HashMap<String, Object> row = semesters.get(i);
+			message += String.format(semesterTpml, (i + 1), row.get("year"), row.get("semester_no"));
+		}
+		message += "\n";
+		this.viewObject.printScreen(message);
+		int selection = this.viewObject.getUserInputInteger("Enter the number of the semester you want to see: ");
+		
+		this.setSemesterInfo(semesters.get(selection - 1));
+		
+		message = "\n -------------------------\n" +
+		   		  "| Year %4d - Semester %2d |\n" +
+		   		  " -------------------------\n\n";
+
+		this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
+		
+	}
+	
 }

@@ -5,14 +5,13 @@ import java.util.InputMismatchException;
 
 import org.json.simple.parser.ParseException;
 
-public class ClassDirector {
+public class ClassDirector extends Person {
 
 	private ArrayList<Course> listOfCourses;
-	private View viewObject; 
 	private Semester semester;
 
 	public ClassDirector(View view) {
-		this.viewObject = view;
+		super("Class Director", "class.director@gmail.com", view);
 		listOfCourses = new ArrayList<Course>();
 		this.showSelectedOptionFromInitScreen();
 	}
@@ -34,36 +33,14 @@ public class ClassDirector {
 				       " 3: Go back\n\n" +
 				       "Enter the number for your selection: ";
 			
-			int input = this.viewObject.getUserInputInteger(message);
+			int input = this.getViewObject().getUserInputInteger(message);
 			
 			try {
 				if (input == 1) {
 					this.createNewSemester();
 				} else if(input == 2) {
-					
-					message = "\n ----------------\n" +
-							  "|    Semesters   |\n" +
-							  " ----------------\n\n";
-					
-					ArrayList<HashMap<String, Object>> semesters = Semester.getSemesters();
-					String semesterTpml = " %1d: year: %s - semester: %1d \n";
-					for(int i = 0; i < semesters.size(); i++) {
-						HashMap<String, Object> row = semesters.get(i);
-						message += String.format(semesterTpml, (i + 1), row.get("year"), row.get("semester_no"));
-					}
-					message += "\n";
-					this.viewObject.printScreen(message);
-					int selection = this.viewObject.getUserInputInteger("Enter the number of the semester you want to see: ");
-					
-					this.setSemesterInfo(semesters.get(selection - 1));
-					
-					message = "\n -------------------------\n" +
-					   		  "| Year %4d - Semester %2d |\n" +
-					   		  " -------------------------\n\n";
-			
-					this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
+					this.openSemester();
 					this.actionsInsideSemester();
-					
 				} else if(input == 3) {
 					finishAction = true;
 				} else {
@@ -79,17 +56,12 @@ public class ClassDirector {
 		}
 	}
 	
-	private void setSemesterInfo(HashMap<String, Object> selectedSemester) {
-		this.semester = new Semester((int) selectedSemester.get("year"), (int) selectedSemester.get("semester_no"));
-		this.semester.setDatasbaseId((int) selectedSemester.get("id"));
-	}
-	
 	private void createNewSemester() {
-		this.viewObject.printScreen("\n\n--- Enter the YEAR and SEMESTER ---\n");
-		int year = Integer.valueOf(this.viewObject.getUserInputInteger("Enter the Year: "));
-		int semester = Integer.valueOf(this.viewObject.getUserInputInteger("Enter the Semester: "));
+		this.getViewObject().printScreen("\n\n--- Enter the YEAR and SEMESTER ---\n");
+		int year = Integer.valueOf(this.getViewObject().getUserInputInteger("Enter the Year: "));
+		int semester = Integer.valueOf(this.getViewObject().getUserInputInteger("Enter the Semester: "));
 		
-		this.semester = new Semester(year, semester);
+		this.setSemester(new Semester(year, semester));
 		SemesterInfoFileHandler fileHandler;
 		HashMap<String, Object> lastSemesterInfo = new HashMap<String, Object>();
 		
@@ -105,15 +77,15 @@ public class ClassDirector {
 			e.printStackTrace();
 		}
 		
-		this.semester.setDatasbaseId((int) lastSemesterInfo.get("id"));
+		this.getSemester().setDatasbaseId((int) lastSemesterInfo.get("id"));
 		
-		this.viewObject.printScreen("\n\nNew Semester Created\n");
+		this.getViewObject().printScreen("\n\nNew Semester Created\n");
 		
 		String message = "\n -------------------------\n" +
 				   		 "| Year %4d - Semester %2d |\n" +
 				   		 " -------------------------\n\n";
 		
-		this.viewObject.printScreen(String.format(message, year, semester));
+		this.getViewObject().printScreen(String.format(message, year, semester));
 		this.actionsInsideSemester();
 	}
 	
@@ -127,146 +99,105 @@ public class ClassDirector {
 							 "   3: See courses in the list\n" +
 							 "   4: Go Back\n" + 
 							 "\nEnter the number for your selection: ";
-			int input = Integer.valueOf(this.viewObject.getUserInputInteger(message));
+			int input = Integer.valueOf(this.getViewObject().getUserInputInteger(message));
 			
 			try {
 				if (input == 1) {
-					message = "\n -------------------------\n" +
-					   		  "|       New Course       |\n" +
-					   		  " -------------------------\n" +
-							   " Write the name of the course \n" +
-							   " And the list of requirements \n\n";
-					this.viewObject.printScreen(message);
-					String courseName = this.viewObject.getUserInputString("Enter the name: ");
-					int timeExp = this.viewObject.getUserInputInteger("Experience of teacher: ");
-					String availability = this.viewObject.getUserInputString("Availability: ");
-					String background = this.viewObject.getUserInputString("Teacher background: ");
-					
-					ListOfRequirements courseRequirements = new ListOfRequirements(timeExp, availability, background);
-					Course newCourse = new Course(courseName, courseRequirements);
-					this.listOfCourses.add(newCourse);
-					newCourse.save(this.semester.getDatasbaseId());
-					
-					this.viewObject.printScreen("\nCourse " + newCourse.getCourseName() + " added to the list\n");
-					
+					this.createCourseAction();
 				} else if(input == 2) {
-					message = "\n -------------------------\n" +
-					   		  "|    List of Courses    |\n" +
-					   		  " -------------------------\n\n";
-					
-					
-					ArrayList<HashMap<String, Object>> courseObject = Course.getCourses();
-					String courseStringTpml = "  %2d: %s    \n";
-					if(courseObject.size() > 0) {
-						for(int i = 0; i < courseObject.size(); i++) {
-							HashMap<String, Object> row = courseObject.get(i);
-							message += String.format(courseStringTpml, (i + 1), row.get("name"));
-						}
-						
-						message += "\n";
-						this.viewObject.printScreen(message);
-
-						
-						int selection = this.viewObject.getUserInputInteger("Enter the number for your selection: ");
-						
-						this.viewObject.printScreen("\nEnter the requirements for the course\n");
-						int timeExp = this.viewObject.getUserInputInteger("Experience of teacher: ");
-						String availability = this.viewObject.getUserInputString("Availability: ");
-						String background = this.viewObject.getUserInputString("Teacher background: ");
-						
-						ListOfRequirements courseRequirements = new ListOfRequirements(timeExp, availability, background);
-						Course tempCourse = new Course((String) courseObject.get(selection - 1).get("name"), courseRequirements);
-						tempCourse.setId((int) courseObject.get(selection - 1).get("id"));
-						this.listOfCourses.add(tempCourse);
-						this.semester.addACourse(this.semester.getDatasbaseId(), tempCourse);
-						
-						this.viewObject.printScreen("\nCourse " + this.listOfCourses.get(selection - 1).getCourseName() + " was added to the list\n");
-						
-					} else {
-						message += "There are no courses yet\n" +
-								   "Create courses\n\n";
-						this.viewObject.printScreen(message);
-					}
-				
+					this.assignCourseToList();
 				} else if(input == 3) {
-					message = "\n -------------------------\n" +
-					   		  "|    List of Courses    |\n" +
-					   		  " -------------------------\n\n";
-					
-					
-					ArrayList<HashMap<String, Object>> courseObject = Semester.getCourses(this.semester.getDatasbaseId());
-					String courseStringTpml = "  %2d: %s    \n";
-					if(courseObject.size() > 0) {
-						for(int i = 0; i < courseObject.size(); i++) {
-							HashMap<String, Object> row = courseObject.get(i);
-							HashMap<String, Object> course = Course.findCourseInFile((int) row.get("course_id"));
-							message += String.format(courseStringTpml, (i + 1), course.get("name"));
-						}
-						
-						message += "\n";
-						this.viewObject.printScreen(message);
-						
-					} else {
-						message += "There are no courses yet\n" +
-								   "Create courses\n\n";
-						this.viewObject.printScreen(message);
-					}
+					this.listCoursesInTheSystem();
 				} else if(input == 4) {
 					finishAction = true;
 				} else {
-					this.viewObject.printScreen("Enter a numerical value within the range");
+					this.getViewObject().printScreen("Enter a numerical value within the range");
 				}
 			} catch (InputMismatchException e) {
-				this.viewObject.printScreen("Wrong input");
+				this.getViewObject().printScreen("Wrong input");
 			} catch(ParseException | IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public void createCourseAction() {
-		String message = "\n--- NEW COURSE ---\n\n" +
-				   		 " Write the name of the course \n" +
-				   		 " And the list of requirements \n\n";
-		this.viewObject.printScreen(message);
+	private void createCourseAction() throws ParseException {
+		String message = "\n -------------------------\n" +
+		   		  		 "|       New Course       |\n" +
+		   		  		 " -------------------------\n" +
+		   		  		 " Write the name of the course \n" +
+		   		  		 " And the list of requirements \n\n";
+		this.getViewObject().printScreen(message);
+		String courseName = this.getViewObject().getUserInputString("Enter the name: ");
 		
-		String courseName = this.viewObject.getUserInputString("Course Name: ");
-		int timeExperience = this.viewObject.getUserInputInteger("Time of Experience: ");
-		String availability = this.viewObject.getUserInputString("Availability: ");
-		String teacherBackground = this.viewObject.getUserInputString("Background of teacher: ");
-		HashMap<String, Object> lastSemesterInfo = new HashMap<String, Object>();
+		ListOfRequirements courseRequirements = addRequirementsToCourse();
+		Course newCourse = new Course(courseName, courseRequirements);
+		this.listOfCourses.add(newCourse);
+		newCourse.save(this.getSemester().getDatasbaseId());
 		
-		ListOfRequirements newListOfRequirements = new ListOfRequirements(timeExperience, availability, teacherBackground);
-		Course newCourse = new Course(courseName, newListOfRequirements);
-		
-		CourseFileHandler courseFileHandler;
-		SemesterInfoFileHandler semesterFileHandler;
-		
-		try {
-			courseFileHandler = new CourseFileHandler();
-			courseFileHandler.create(courseName);
-			lastSemesterInfo = courseFileHandler.getLastRegister();
-			newCourse.setId((int) lastSemesterInfo.get("id"));
-			semesterFileHandler = new SemesterInfoFileHandler();
-			semesterFileHandler.addNewCourse(this.semester.getDatasbaseId(), newCourse.getId(), timeExperience, availability, teacherBackground);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		message = " --- New Course Created --- " +
-				  " Course Name: %s \n" +
-				  " Experience: %2d \n" + 
-				  " Availability: %s \n" + 
-				  " Background: %s";
-		
-		this.viewObject.printScreen(String.format(message, courseName, timeExperience, availability, teacherBackground));
-		this.actionsInsideSemester();
+		this.getViewObject().printScreen("\nCourse " + newCourse.getCourseName() + " added to the list\n");
 	}
-
+	
+	private void assignCourseToList() throws IOException, ParseException {
+		String message = "\n -------------------------\n" +
+		   		  		 "|    List of Courses    |\n" +
+		   		  		 " -------------------------\n\n";
+		
+		
+		ArrayList<HashMap<String, Object>> courseObject = Course.getCourses();
+		String courseStringTpml = "  %2d: %s    \n";
+		if(courseObject.size() > 0) {
+			for(int i = 0; i < courseObject.size(); i++) {
+				HashMap<String, Object> row = courseObject.get(i);
+				message += String.format(courseStringTpml, (i + 1), row.get("name"));
+			}
+			
+			message += "\n";
+			this.getViewObject().printScreen(message);
+			
+			int selection = this.getViewObject().getUserInputInteger("Enter the number for your selection: ");
+			this.getViewObject().printScreen("\nEnter the requirements for the course\n");
+			
+			ListOfRequirements courseRequirements = addRequirementsToCourse();
+			Course tempCourse = new Course((String) courseObject.get(selection - 1).get("name"), courseRequirements);
+			tempCourse.setId((int) courseObject.get(selection - 1).get("id"));
+			this.listOfCourses.add(tempCourse);
+			this.getSemester().addACourse(this.getSemester().getDatasbaseId(), tempCourse);
+			
+			this.getViewObject().printScreen("\nCourse " + this.listOfCourses.get(selection - 1).getCourseName() + " was added to the list\n");
+			
+		} else {
+			message += "There are no courses yet\n" +
+					   "Create courses\n\n";
+			this.getViewObject().printScreen(message);
+		}
+	}
+	
+	private void listCoursesInTheSystem() throws ParseException, IOException {
+		String message = "\n -------------------------\n" +
+		   		  		 "|    List of Courses    |\n" +
+		   		  		 " -------------------------\n\n";
+		
+		
+		ArrayList<HashMap<String, Object>> courseObject = Semester.getCourses(this.getSemester().getDatasbaseId());
+		String courseStringTpml = "  %2d: %s    \n";
+		if(courseObject.size() > 0) {
+			for(int i = 0; i < courseObject.size(); i++) {
+				HashMap<String, Object> row = courseObject.get(i);
+				HashMap<String, Object> course = Course.findCourseInFile((int) row.get("course_id"));
+				message += String.format(courseStringTpml, (i + 1), course.get("name"));
+			}
+			
+			message += "\n";
+			this.getViewObject().printScreen(message);
+			
+		} else {
+			message += "There are no courses yet\n" +
+					   "Create courses\n\n";
+			this.getViewObject().printScreen(message);
+		}
+	}
+	
 	public void removeCourse(String courseToRemove) {
 		boolean removed = false;
 		for (int i = 0; i < listOfCourses.size(); i++) {
@@ -290,16 +221,12 @@ public class ClassDirector {
 		return null;
 	}
 
-	public void addRequirementsToCourse(Course selectedCourse, int timeExp, String availability, String description) {
-		if (selectedCourse != null) {
-			selectedCourse.updateListOfRequirements(timeExp, availability, description);
-		} else {
-			System.err.println("Please, select an existing course.");
-		}
-	}
-
-	public void addCourseToList(String newCourse) {
-		listOfCourses.add(new Course(newCourse));
+	public ListOfRequirements addRequirementsToCourse() {
+		int timeExp = this.getViewObject().getUserInputInteger("Experience of teacher: ");
+		String availability = this.getViewObject().getUserInputString("Availability: ");
+		String background = this.getViewObject().getUserInputString("Teacher background: ");
+		
+		return new ListOfRequirements(timeExp, availability, background);
 	}
 
 	public void removeCourseFromList(Course selectedCourse) {
