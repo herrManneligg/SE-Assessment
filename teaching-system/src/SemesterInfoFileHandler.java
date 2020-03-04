@@ -91,7 +91,11 @@ public class SemesterInfoFileHandler extends FileHandler {
 				} else {
 					courses_hashmap.put("teacher_assigned", current_course.get("teacher_assigned"));
 				}
-				courses_hashmap.put("approved", (boolean) current_course.get("approved"));
+				if (current_course.get("approved") != null) {
+					courses_hashmap.put("approved", (boolean) current_course.get("approved"));
+				} else {
+					courses_hashmap.put("approved", current_course.get("approved"));
+				}
 				courses_hashmap.put("experience", (int) (long) current_course.get("experience"));
 				courses_hashmap.put("availability", (String) current_course.get("availability"));
 				courses_hashmap.put("backgroundRequirement", (String) current_course.get("backgroundRequirement"));
@@ -570,7 +574,7 @@ public class SemesterInfoFileHandler extends FileHandler {
 					JSONObject assignedTeachersObject = new JSONObject();
 					assignedTeachersObject.put("course_id", courseId);
 					assignedTeachersObject.put("teacher_assigned", null);
-					assignedTeachersObject.put("approved", false);
+					assignedTeachersObject.put("approved", null);
 					assignedTeachersObject.put("experience", experience);
 					assignedTeachersObject.put("availability", availability);
 					assignedTeachersObject.put("backgroundRequirement", backgroundRequirement);

@@ -128,5 +128,10 @@ public class Course {
 		return courseFileHandler.find(courseId);
 	}
 	
+	public static void setCourseDesitionOfApproval(int semesterId, int courseId, boolean desition) throws IOException, org.json.simple.parser.ParseException {
+		SemesterInfoFileHandler semesterFileHandler = new SemesterInfoFileHandler();
+		semesterFileHandler.setCourseApproval(semesterId, courseId, desition);
+	}
+	
 }
 

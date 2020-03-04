@@ -45,7 +45,8 @@ public class Administrator extends Person {
 				 	   		 "--------- Actions ---------\n\n" +
 				 	   		 " 1: Add Teacher to System\n" +
 				 	   		 " 2: Assign Teacher to Courses with matching requirements\n" +
-				 	   		 " 3: Go back to the role-selecting-view\n\n" +
+				 	   		 " 3: Set training for Teachers\n" +
+				 	   		 " 4: Go back to the role-selecting-view\n\n" +
 				 	   		 "Enter the number for your selection and press 'Enter': ";
 			int input = this.getViewObject().getUserInputInteger(message);
 			int i = 1;
@@ -56,6 +57,8 @@ public class Administrator extends Person {
 				} else if(input == 2) {
 					this.assignTeacherToCourse();
 				} else if(input == 3) {
+					// training for teachers
+				} else if(input == 4) {
 					finishAction = true;
 				} else {
 					System.out.println("Enter a numerical value within the range");
