@@ -31,6 +31,7 @@ public class View {
 			try {
 				System.out.print(message);
 				userResponse = this.input.nextInt();
+				this.input.nextLine();
 				action = true;
 			} catch (InputMismatchException e) {
 				this.ps.print("Please use only numerical values!\n");
@@ -44,7 +45,7 @@ public class View {
 		String userResponse = "";
 		try {
 			this.ps.print(message);
-			userResponse = this.input.next();
+			userResponse = this.input.nextLine();
 		} catch(IllegalArgumentException e) {
 			this.input.nextLine();
 			this.ps.print("Wrong choice of letter, try again\n");

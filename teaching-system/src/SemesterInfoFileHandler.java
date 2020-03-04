@@ -682,6 +682,17 @@ public class SemesterInfoFileHandler extends FileHandler {
 		}
 	}
 
+	public ArrayList<HashMap<String, Object>> getApprovedAndDeclinedCourses(int semesterId) throws ParseException, IOException {
+		ArrayList<HashMap<String, Object>> coursesList = this.getCoursesList(semesterId);
+		ArrayList<HashMap<String, Object>> approvedDeclinedCoursesList = new ArrayList<HashMap<String, Object>>();
+		for(HashMap<String, Object> row : coursesList) {
+			if(row.get("approved") != null) {
+				approvedDeclinedCoursesList.add(row);
+			}
+		}
+		return approvedDeclinedCoursesList;
+	}
+	
 	public boolean isCourseAssignedToSemester(int semesterId, int courseId) throws ParseException, IOException {
 		ArrayList<HashMap<String, Object>> coursesList = this.getCoursesList(semesterId);
 		for(HashMap<String, Object> row : coursesList) {

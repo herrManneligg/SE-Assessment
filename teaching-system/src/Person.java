@@ -9,7 +9,7 @@ public abstract class Person {
 	
 	private String name;
 	private String email;
-	private View viewObject;
+	private View viewObject; // view for printing in the console
 	private Semester semester;
 
 	public Person(String name, String email) {

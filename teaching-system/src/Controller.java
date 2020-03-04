@@ -4,11 +4,9 @@ import java.util.InputMismatchException;
 public class Controller {
 
 	private View view;
-	private Model model;
 	private PrintStream ps;
 
 	public Controller(PrintStream ps) {
-		this.model = new Model();
 		this.ps = ps;
 		this.view = new View(ps);
 		this.showSelectedScreen();
@@ -22,14 +20,6 @@ public class Controller {
 		this.view = view;
 	}
 
-	public Model getModel() {
-		return model;
-	}
-
-	public void setModel(Model model) {
-		this.model = model;
-	}
-
 	public PrintStream getPs() {
 		return ps;
 	}
@@ -38,15 +28,17 @@ public class Controller {
 		this.ps = ps;
 	}
 	
-	public String getInitView() {
-		return this.model.getInitialViewInfo();
-	}
-	
 	public void showSelectedScreen() {
 		boolean finishAction = false;
 		while(!finishAction) {
 			try {
-				int input = this.view.getUserInputInteger(this.model.getInitialViewInfo());
+				String message = "\nPlease enter the number that corresponds to your role and press 'Enter':\n\n" + 
+								 "   1: Class Director\n" + 
+								 "   2: Administrator\n" + 
+								 "   3: PTT Director\n" + 
+								 "   4: Close Program\n" +
+								 "\nEnter the number for your selection: ";
+				int input = this.view.getUserInputInteger(message);
 				
 				if (input == 1) {
 					new ClassDirector(this.view);
@@ -62,7 +54,7 @@ public class Controller {
 				}
 				
 			} catch (InputMismatchException e) {
-				System.out.println("noob");
+				System.out.println("Enter a numerical value.");
 			}
 			
 		}

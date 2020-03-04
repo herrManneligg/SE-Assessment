@@ -43,7 +43,7 @@ public class PttDirector extends Person {
 					System.out.println("Enter a numerical value within the range");
 				}
 			} catch (InputMismatchException | IOException | ParseException e) {
-				System.out.println("noob");
+				System.out.println("Enter a numerical value.");
 			}
 		}
 	}

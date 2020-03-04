@@ -48,7 +48,7 @@ public class ClassDirector extends Person {
 					System.out.println("Enter a numerical value within the range");
 				}
 			} catch (InputMismatchException e) {
-				System.out.println("noob");
+				System.out.println("Enter a numerical value.");
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {

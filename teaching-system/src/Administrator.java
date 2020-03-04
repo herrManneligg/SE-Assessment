@@ -21,7 +21,6 @@ public class Administrator extends Person {
 			this.fillListOfCourses();
 			this.fillListOfTeachers();
 		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -57,7 +56,7 @@ public class Administrator extends Person {
 				} else if(input == 2) {
 					this.assignTeacherToCourse();
 				} else if(input == 3) {
-					// training for teachers
+					this.setTrainingForTeachers();
 				} else if(input == 4) {
 					finishAction = true;
 				} else {
@@ -72,6 +71,26 @@ public class Administrator extends Person {
 	// Getting the ArrayList of courses
 	public ArrayList<Course> getListOfCourses() {
 		return listOfCourses;
+	}
+	
+	public void setTrainingForTeachers() {
+		ArrayList<HashMap<String, Object>> listOfCourses = new ArrayList<HashMap<String, Object>>();
+		try {
+			listOfCourses = Semester.getApprovedAndDeclinedCourses(this.getSemester().getDatasbaseId());
+		} catch (ParseException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		String message = " ------------------ \n" +
+						 "| List of Courses |\n" +
+						 " ------------------ \n\n";
+		
+		int i = 0;
+		for(HashMap<String, Object> row : listOfCourses) {
+			message += " " + (i + 1) + ": Course: " + row.get("");
+			i++;
+		}
+						 
 	}
 	
 	public void fillListOfCourses() throws IOException, ParseException {
@@ -235,7 +254,7 @@ public class Administrator extends Person {
 
 		Scanner in = new Scanner(System.in);
 
-		System.out.println("-- Enter the information of the new teacher --");
+		this.getViewObject().printScreen("-- Enter the information of the new teacher --\n");
 		while (!isAccepted) {
 			System.out.print("Name: ");
 			try {
