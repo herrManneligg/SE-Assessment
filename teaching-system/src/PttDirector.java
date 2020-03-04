@@ -36,7 +36,9 @@ public class PttDirector extends Person {
 			try {
 				if (input == 1) {
 					this.openSemester();
-					this.showTeacherRequests();
+					if(this.getSemester() != null) {
+						this.showTeacherRequests();
+					}
 				} else if(input == 2) {
 					finishAction = true;
 				} else {

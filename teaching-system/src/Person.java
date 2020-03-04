@@ -85,7 +85,7 @@ public abstract class Person {
 	
 			this.viewObject.printScreen(String.format(message, this.semester.getYear(), this.semester.getSemesterNo()));
 		} else {
-			this.viewObject.printScreen("\n--- There are no Semesters, create one! ---\n\n");
+			this.viewObject.printScreen("\n--- There are no Semesters ---\n\n");
 		}
 		
 	}

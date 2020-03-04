@@ -18,8 +18,10 @@ public class Administrator extends Person {
 		this.listOfCourses = new ArrayList<Course>();
 		try {
 			this.openSemester();
-			this.fillListOfCourses();
-			this.fillListOfTeachers();
+			if(this.getSemester() != null) {
+				this.fillListOfCourses();
+				this.fillListOfTeachers();
+			}
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
