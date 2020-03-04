@@ -54,7 +54,8 @@ public class Administrator extends Person {
 				if (input == 1) {
 					this.createTeacher();
 				} else if(input == 2) {
-					this.assignTeacherToCourse();
+//					this.assignTeacherToCourse();
+					this.getViewObject().printScreen("\nThis the assign teacher to course function\n\n");
 				} else if(input == 3) {
 					this.setTrainingForTeachers();
 				} else if(input == 4) {
@@ -73,7 +74,7 @@ public class Administrator extends Person {
 		return listOfCourses;
 	}
 	
-	public void setTrainingForTeachers() {
+	public void setTrainingForTeachers() throws IOException, ParseException {
 		ArrayList<HashMap<String, Object>> listOfCourses = new ArrayList<HashMap<String, Object>>();
 		try {
 			listOfCourses = Semester.getApprovedAndDeclinedCourses(this.getSemester().getDatasbaseId());
@@ -87,10 +88,19 @@ public class Administrator extends Person {
 		
 		int i = 0;
 		for(HashMap<String, Object> row : listOfCourses) {
-			message += " " + (i + 1) + ": Course: " + row.get("");
+			HashMap<String, Object> course = Course.findCourseInFile((int) row.get("course_id"));
+			message += " " + (i + 1) + ": Course: " + course.get("name") + " \n";
 			i++;
 		}
-						 
+		this.getViewObject().printScreen(message);
+		
+		message = "\nSelect the course you want to check\n";
+		int selection = this.getViewObject().getUserInputInteger(message);
+		
+		HashMap<String, Object> courseSelected = Course.findCourseInFile((int) listOfCourses.get(selection - 1).get("id"));
+		
+		message = "\n ----------------- \n" +
+				  "|  Course: " + courseSelected.get("name") + " |\n";
 	}
 	
 	public void fillListOfCourses() throws IOException, ParseException {
