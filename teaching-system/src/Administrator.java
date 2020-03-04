@@ -56,10 +56,10 @@ public class Administrator extends Person {
 				if (input == 1) {
 					this.createTeacher();
 				} else if(input == 2) {
-//					this.assignTeacherToCourse();
-					this.getViewObject().printScreen("\nThis the assign teacher to course function\n\n");
+					this.assignTeacherToCourse();
 				} else if(input == 3) {
-					this.setTrainingForTeachers();
+//					this.setTrainingForTeachers();
+					this.getViewObject().printScreen("\nThis the set training for teacher function\n\n");
 				} else if(input == 4) {
 					finishAction = true;
 				} else {
