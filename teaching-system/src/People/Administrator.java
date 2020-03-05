@@ -59,7 +59,6 @@ public class Administrator extends Person {
 				 	   		 " 4: Go back to the role-selecting-view\n\n" +
 				 	   		 "Enter the number for your selection and press 'Enter': ";
 			int input = this.getViewObject().getUserInputInteger(message);
-			int i = 1;
 			
 			try {
 				if (input == 1) {
@@ -67,7 +66,7 @@ public class Administrator extends Person {
 				} else if(input == 2) {
 					this.assignTeacherToCourse();
 				} else if(input == 3) {
-//					this.setTrainingForTeachers();
+					this.setTrainingForTeachers();
 					this.getViewObject().printScreen("\nThis the set training for teacher function\n\n");
 				} else if(input == 4) {
 					finishAction = true;
@@ -413,7 +412,6 @@ public class Administrator extends Person {
 					"\n Something went wrong when creating the new teacher. Please, revise the teacher details and try again.");
 		}
 
-		in.close();
 	}
 
 	// Checking if the user input is alphabetical

@@ -1,7 +1,4 @@
 package MVC;
-import People.*;
-import FileHandler.*;
-import CourseTeaching.*;
 import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -35,8 +32,8 @@ public class View {
 			try {
 				System.out.print(message);
 				userResponse = this.input.nextInt();
-				this.input.nextLine();
 				action = true;
+				this.input.nextLine();
 			} catch (InputMismatchException e) {
 				this.ps.print("Please use only numerical values!\n");
 				input.nextLine();
