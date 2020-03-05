@@ -1,6 +1,9 @@
+package People;
+import CourseTeaching.*;
+import FileHandler.*;
+import MVC.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.json.simple.parser.ParseException;
