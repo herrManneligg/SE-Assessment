@@ -1,9 +1,17 @@
+package People;
+import MVC.*;
+import FileHandler.*;
+import CourseTeaching.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 
 import org.json.simple.parser.ParseException;
+
+import CourseTeaching.ListOfRequirements;
+import CourseTeaching.Semester;
+import MVC.View;
 
 public class PttDirector extends Person {
 	

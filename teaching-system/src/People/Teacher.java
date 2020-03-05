@@ -1,9 +1,15 @@
+package People;
+import MVC.*;
+import FileHandler.*;
+import CourseTeaching.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 import org.json.simple.parser.ParseException;
+
+import CourseTeaching.Course;
 
 public class Teacher extends Person {
 

@@ -1,3 +1,4 @@
+package CourseTeaching;
 import java.util.ArrayList;
 
 public class ListOfRequirements {

@@ -1,7 +1,11 @@
+package CourseTeaching;
+import FileHandler.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import People.Teacher;
 
 
 public class Course {
@@ -62,13 +66,6 @@ public class Course {
 	}
 
 	public Teacher getTeacher() { // enables method to return null value
-//		if (this.assignedTeacher == null) {
-//			Teacher t = null;
-//			return t;
-//		} else {
-//			return assignedTeacher;
-//		}
-		// shortened code to following line> runs condition: if yes=null if no=this.assignedTeacher  // Ternary operation
 		return this.assignedTeacher == null ? null : this.assignedTeacher;
 	}
 

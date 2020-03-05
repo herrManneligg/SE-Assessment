@@ -1,4 +1,7 @@
+package MVC;
 import java.io.PrintStream;
+
+import MVC.Controller;
 
 public class MainTestView {
 

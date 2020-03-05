@@ -1,3 +1,7 @@
+package MVC;
+import People.*;
+import FileHandler.*;
+import CourseTeaching.*;
 import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -20,11 +24,11 @@ public class View {
 		this.input.close();
 	}
 
-	protected void printScreen(String message) {
+	public void printScreen(String message) {
 		this.ps.print(message);
 	}
 
-	protected int getUserInputInteger(String message) {
+	public int getUserInputInteger(String message) {
 		int userResponse = -1;
 		boolean action = false;
 		while(!action) {
@@ -41,7 +45,7 @@ public class View {
 		return userResponse;
 	}
 
-	protected String getUserInputString(String message) {
+	public String getUserInputString(String message) {
 		String userResponse = "";
 		try {
 			this.ps.print(message);

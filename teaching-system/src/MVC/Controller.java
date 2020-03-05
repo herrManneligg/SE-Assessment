@@ -1,3 +1,5 @@
+package MVC;
+import People.*;
 import java.io.PrintStream;
 import java.util.InputMismatchException;
 

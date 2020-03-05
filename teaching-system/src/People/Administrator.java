@@ -1,3 +1,8 @@
+package People;
+
+import MVC.*;
+import FileHandler.*;
+import CourseTeaching.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -5,6 +10,10 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.json.simple.parser.ParseException;
+
+import CourseTeaching.ListOfRequirements;
+import CourseTeaching.Semester;
+import MVC.View;
 
 public class Administrator extends Person {
 
@@ -404,7 +413,7 @@ public class Administrator extends Person {
 					"\n Something went wrong when creating the new teacher. Please, revise the teacher details and try again.");
 		}
 
-//		in.close();
+		in.close();
 	}
 
 	// Checking if the user input is alphabetical

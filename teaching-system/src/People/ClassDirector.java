@@ -1,9 +1,17 @@
+package People;
+import MVC.*;
+import FileHandler.*;
+import CourseTeaching.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 
 import org.json.simple.parser.ParseException;
+
+import CourseTeaching.ListOfRequirements;
+import CourseTeaching.Semester;
+import MVC.View;
 
 public class ClassDirector extends Person {
 
@@ -94,7 +102,7 @@ public class ClassDirector extends Person {
 		
 			String message = "\nPlease enter the number that corresponds to your role and press 'Enter':\n\n" + 
 							 "   1: Create Course\n" +
-							 "   2: Assign Course\n" + 
+							 "   2: Assign requirements to Course\n" + 
 							 "   3: See courses in the list\n" +
 							 "   4: Go Back\n" + 
 							 "\nEnter the number for your selection: ";

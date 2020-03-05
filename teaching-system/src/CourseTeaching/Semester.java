@@ -1,3 +1,6 @@
+package CourseTeaching;
+import People.*;
+import FileHandler.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
